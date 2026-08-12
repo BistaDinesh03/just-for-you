@@ -1,239 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Just For You ✦</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
-    
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: #08080b;
-      margin: 0;
-      overflow-x: hidden;
-      color: #f0ebe3;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    .serif {
-      font-family: 'Cormorant Garamond', 'Times New Roman', serif;
-      letter-spacing: -0.01em;
-    }
-    
-    ::-webkit-scrollbar { width: 3px; }
-    ::-webkit-scrollbar-track { background: #0a0a0e; }
-    ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 10px; }
-    
-    .grain-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 999;
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjY1IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMiIgLz48L3N2Zz4=');
-      background-repeat: repeat;
-      opacity: 0.12;
-    }
-    
-    .scene {
-      transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: opacity, transform;
-      padding: 0 1rem;
-    }
-    
-    .hidden-scene {
-      opacity: 0;
-      pointer-events: none;
-      position: absolute;
-      width: 100%;
-      left: 0;
-      transform: translateY(15px);
-      visibility: hidden;
-    }
-    
-    .active-scene {
-      opacity: 1;
-      pointer-events: auto;
-      position: relative;
-      transform: translateY(0);
-      visibility: visible;
-    }
-    
-    .particles-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-    
-    .star {
-      position: absolute;
-      background: rgba(255,255,255,0.6);
-      border-radius: 50%;
-      opacity: 0;
-      animation: floatStar 7s infinite ease-in-out;
-    }
-    
-    @keyframes floatStar {
-      0% { opacity: 0; transform: translateY(0) scale(0.5); }
-      15% { opacity: 0.9; }
-      85% { opacity: 0.1; }
-      100% { opacity: 0; transform: translateY(-40px) scale(1.2); }
-    }
-    
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.94);
-      backdrop-filter: blur(15px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-    }
-    .lightbox.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .lightbox img {
-      max-height: 85vh;
-      max-width: 92vw;
-      border-radius: 8px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-      transform: scale(0.92);
-      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .lightbox.active img {
-      transform: scale(1);
-    }
-    
-    @media (max-width: 640px) {
-      .serif { letter-spacing: -0.02em; }
-      .scene { padding: 0 0.5rem; }
-      button { min-height: 48px; min-width: 48px; }
-    }
-    
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="A tiny interactive experience for someone special.">
+    <title>Just For You</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ─── FONTS ─────────────────────────────────── */
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
+        
+        /* ─── RESET & BASE ──────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg: #0a0a0b;
+            --text: #e8e4df;
+            --text-muted: #9c958b;
+            --accent: #d4a574;
+            --accent-soft: #c4956a;
+            --card-bg: rgba(255,255,255,0.02);
+            --border: rgba(255,255,255,0.06);
+            --font-serif: 'EB Garamond', 'Times New Roman', serif;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --transition: 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+        
+        /* ─── SCENE SYSTEM ──────────────────────────── */
+        .scene {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition);
+            overflow-y: auto;
+            z-index: 1;
+        }
+        
+        .scene.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 2;
+        }
+        
+        .scene.hidden {
+            display: none;
+        }
+        
+        /* ─── TYPOGRAPHY ────────────────────────────── */
+        .serif { font-family: var(--font-serif); }
+        .text-hero { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
+        .text-heading { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; }
+        .text-body { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--text-muted); max-width: 480px; }
+        .text-question { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+        
+        /* ─── BUTTONS ────────────────────────────────── */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 2.4rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--text);
+            border-radius: 100px;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            min-height: 48px;
+            min-width: 48px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-primary:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-primary:disabled { opacity: 0.4; pointer-events: none; }
+        
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.8rem;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            border-radius: 100px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            min-height: 48px;
+        }
+        .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+        
+        /* ─── MEMORY CARDS ───────────────────────────── */
+        .memory-card {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            padding: 2rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            transition-delay: var(--delay, 0s);
+        }
+        .memory-card.visible { opacity: 1; transform: translateY(0); }
+        
+        .memory-date {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+        }
+        .memory-title { font-family: var(--font-serif); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; }
+        .memory-text { color: var(--text-muted); line-height: 1.7; max-width: 500px; }
+        .memory-image-wrap {
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+        }
+        .memory-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .memory-image-wrap:hover .memory-image { transform: scale(1.03); }
+        
+        @media (min-width: 640px) {
+            .memory-card { grid-template-columns: 1fr 1fr; align-items: center; gap: 2.5rem; }
+            .memory-card:nth-child(even) .memory-content { order: 2; }
+            .memory-card:nth-child(even) .memory-image-wrap { order: 1; }
+        }
+        
+        /* ─── LIGHTBOX ────────────────────────────────── */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.94);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+        .lightbox-overlay img {
+            max-width: 90vw;
+            max-height: 75vh;
+            border-radius: 4px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
+        .lightbox-caption {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-style: italic;
+            font-family: var(--font-serif);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: none;
+        }
+        
+        /* ─── CELEBRATION PARTICLES ──────────────────── */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatUp 4s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% { opacity: 0.8; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-60vh) scale(0); }
+        }
+        
+        /* ─── SECRET TOAST ────────────────────────────── */
+        .secret-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            border: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            text-align: center;
+            z-index: 200;
+            animation: fadeInUp 0.5s ease;
+            font-family: var(--font-serif);
+            font-style: italic;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        /* ─── REDUCED MOTION ─────────────────────────── */
+        .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+        
+        /* ─── MOBILE FIXES ───────────────────────────── */
+        @media (max-width: 400px) {
+            .scene { padding: 1.5rem 1rem; }
+            .btn-primary { padding: 0.8rem 1.8rem; font-size: 0.95rem; }
+        }
+    </style>
 </head>
-<body class="bg-[#08080b] text-[#f0ebe3]">
-  <div class="grain-overlay"></div>
-  <div id="particlesContainer" class="particles-bg"></div>
+<body>
 
-  <main id="app" class="relative z-10 w-full max-w-4xl mx-auto px-5 md:px-8 pb-24">
-    
-    <!-- SCENE 1: Entry -->
-    <section id="sceneEntry" class="scene active-scene min-h-screen flex flex-col items-center justify-center text-center">
-      <div class="space-y-8 md:space-y-10">
-        <h1 class="text-5xl md:text-7xl lg:text-8xl font-light serif tracking-tight leading-tight" id="entryName">Hey, Her Name.</h1>
-        <p class="text-xl md:text-2xl text-gray-300 font-light tracking-wide max-w-xl mx-auto opacity-80">I made something just for you.</p>
-        <button id="enterButton" class="mt-12 px-10 py-4 bg-white/5 backdrop-blur-md border border-white/20 text-white rounded-full text-lg font-medium hover:bg-white/10 transition-all duration-500 hover:border-white/40 tap-target transform hover:scale-105 active:scale-95">
-          Enter →
-        </button>
-      </div>
-    </section>
-
-    <!-- SCENE 2: Personal -->
-    <section id="scenePersonal" class="scene hidden-scene min-h-screen flex flex-col items-center justify-center text-center">
-      <div class="max-w-2xl space-y-10">
-        <p class="text-2xl md:text-4xl serif italic font-light leading-relaxed" id="personalLine1">This isn't something I made for everyone.</p>
-        <p class="text-2xl md:text-4xl serif italic font-light leading-relaxed" id="personalLine2">I made it for you.</p>
-      </div>
-    </section>
-
-    <!-- SCENE 3: Memories -->
-    <section id="sceneMemories" class="scene hidden-scene py-24 md:py-32">
-      <div class="space-y-32 md:space-y-40" id="memoriesContainer"></div>
-    </section>
-
-    <!-- SCENE 4: Photos -->
-    <section id="scenePhotos" class="scene hidden-scene py-24 md:py-32">
-      <div class="text-center mb-20">
-        <h2 class="text-4xl md:text-6xl serif font-light">moments together</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="photoGrid"></div>
-    </section>
-
-    <!-- SCENE 5: Playful -->
-    <section id="scenePlayful" class="scene hidden-scene min-h-[70vh] flex flex-col items-center justify-center text-center">
-      <div class="max-w-xl space-y-10">
-        <p class="text-3xl md:text-4xl serif font-light">Okay, important question...</p>
-        <p class="text-xl text-gray-400">What do I like more?</p>
-        <div class="flex flex-col sm:flex-row gap-6 justify-center mt-10">
-          <button id="optionFood" class="px-8 py-5 bg-white/5 border border-white/20 rounded-2xl text-xl hover:bg-white/10 transition tap-target">Food 🍜</button>
-          <button id="optionYou" class="px-8 py-5 bg-white/5 border border-white/20 rounded-2xl text-xl hover:bg-white/10 transition tap-target">Talking to you</button>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 0: OPENING                              -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneOpening" class="scene active">
+        <div style="text-align: center; max-width: 600px;">
+            <p class="text-hero serif" id="openingLine1" style="margin-bottom: 0.5rem;">Hey, Her Name.</p>
+            <p class="text-body" id="openingLine2" style="margin-bottom: 2.5rem;">I made something for you.</p>
+            <button id="enterBtn" class="btn-primary">See what's inside →</button>
         </div>
-        <p id="playfulResponse" class="text-2xl serif italic font-light mt-8 opacity-0 transition-opacity duration-700 min-h-[3rem]"></p>
-      </div>
     </section>
 
-    <!-- SCENE 6: Buildup -->
-    <section id="sceneBuildup" class="scene hidden-scene min-h-screen flex flex-col items-center justify-center text-center">
-      <div class="space-y-12 max-w-2xl">
-        <p class="text-2xl md:text-4xl serif font-light leading-relaxed">There's something I've been wanting to tell you.</p>
-        <p class="text-3xl md:text-5xl serif font-light italic">I really like you.</p>
-        <p class="text-xl md:text-2xl text-gray-400">And I've been wondering...</p>
-      </div>
-    </section>
-
-    <!-- SCENE 7: Letter -->
-    <section id="sceneLetter" class="scene hidden-scene min-h-screen flex items-center justify-center py-20">
-      <div class="max-w-3xl w-full bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-3xl p-8 md:p-14 shadow-2xl">
-        <div class="prose prose-invert prose-lg serif italic text-gray-200 leading-relaxed whitespace-pre-line" id="letterContent"></div>
-      </div>
-    </section>
-
-    <!-- SCENE 8: Proposal -->
-    <section id="sceneProposal" class="scene hidden-scene min-h-screen flex flex-col items-center justify-center text-center">
-      <div class="space-y-14 max-w-2xl">
-        <p class="text-3xl md:text-5xl serif font-light">So...</p>
-        <p class="text-2xl md:text-4xl serif font-light italic text-gray-300">I have one question.</p>
-        <h2 class="text-4xl md:text-7xl font-semibold serif leading-tight" id="proposalQuestion">Will you be my girlfriend?</h2>
-        <div class="flex flex-col sm:flex-row gap-6 justify-center mt-12">
-          <button id="yesButton" class="px-12 py-5 bg-white/10 border border-white/30 rounded-full text-2xl font-medium hover:bg-white/20 transition-all tap-target transform hover:scale-105">Yes ❤️</button>
-          <button id="maybeButton" class="px-10 py-5 bg-white/5 border border-white/20 rounded-full text-xl text-gray-300 hover:bg-white/10 transition-all tap-target">Let me think... 🤭</button>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 1: PERSONAL MESSAGE                      -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="scenePersonal" class="scene hidden">
+        <div style="text-align: center; max-width: 500px;">
+            <p class="text-heading serif" style="margin-bottom: 1rem;">This isn't something I made for everyone.</p>
+            <p class="text-body" style="font-style: italic;">I made it just for you.</p>
         </div>
-        <p id="maybeMessageDisplay" class="text-xl serif italic text-gray-400 mt-6 opacity-0 transition-opacity duration-500"></p>
-      </div>
     </section>
 
-    <!-- SCENE 9: Celebration -->
-    <section id="sceneCelebration" class="scene hidden-scene min-h-screen flex flex-col items-center justify-center text-center relative">
-      <div class="space-y-10 z-10 max-w-2xl">
-        <p class="text-3xl md:text-5xl serif font-light">Okay...</p>
-        <p class="text-4xl md:text-6xl serif font-semibold" id="yesMessageDisplay">You just made me really happy. ❤️</p>
-        <p class="text-xl md:text-2xl text-gray-300 mt-8 font-light">I can't wait to make more memories with you.</p>
-      </div>
-      <div id="celebrationCanvas" class="absolute inset-0 z-0 pointer-events-none"></div>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 2: MEMORIES                              -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneMemories" class="scene hidden">
+        <div style="width: 100%; max-width: 900px; padding: 4rem 0;">
+            <p class="text-heading serif" style="margin-bottom: 3rem; text-align: center;">Remember these?</p>
+            <div id="memoriesContainer"></div>
+        </div>
     </section>
 
-    <!-- Secret heart -->
-    <div id="secretHeart" class="fixed bottom-6 right-6 w-10 h-10 bg-white/5 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-lg cursor-pointer z-50 opacity-30 hover:opacity-100 transition-opacity duration-300" title="find the secret">✨</div>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 3: PLAYFUL (optional)                     -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="scenePlayful" class="scene hidden">
+        <div style="text-align: center; max-width: 500px;">
+            <p class="text-heading serif" id="playfulQuestion" style="margin-bottom: 2rem;">Quick question...</p>
+            <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+                <button id="optA" class="btn-primary" style="width: 100%; max-width: 280px;">Pizza 🍕</button>
+                <button id="optB" class="btn-ghost" style="width: 100%; max-width: 280px;">Talking to you</button>
+            </div>
+            <p id="playfulResponse" style="margin-top: 1.5rem; font-style: italic; opacity: 0; transition: opacity 0.5s ease; font-family: var(--font-serif);"></p>
+        </div>
+    </section>
 
-    <!-- Music toggle -->
-    <button id="musicToggle" class="fixed bottom-6 left-6 w-12 h-12 bg-white/5 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-xl z-50 opacity-60 hover:opacity-100 transition" style="display: none;">🎵</button>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 4: BUILDUP                               -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneBuildup" class="scene hidden">
+        <div style="text-align: center; max-width: 500px;">
+            <p class="text-heading serif" style="margin-bottom: 1.5rem;">So I've been thinking...</p>
+            <p class="text-body" style="margin-bottom: 1rem;">About you. About us.</p>
+            <p class="text-body">And there's something I want to ask you.</p>
+        </div>
+    </section>
 
-    <!-- Lightbox -->
-    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-      <span class="absolute top-6 right-8 text-white text-4xl cursor-pointer hover:text-gray-300 z-10">&times;</span>
-      <img id="lightboxImg" src="" alt="memory enlarged">
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 5: LETTER                                -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneLetter" class="scene hidden">
+        <div style="max-width: 550px; text-align: left;">
+            <p id="letterBody" style="font-family: var(--font-serif); font-size: clamp(1.1rem, 2.5vw, 1.3rem); line-height: 1.9; font-style: italic; color: var(--text); white-space: pre-line;"></p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 6: THE QUESTION                          -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneQuestion" class="scene hidden">
+        <div style="text-align: center; max-width: 500px;">
+            <p class="text-question serif" id="questionText" style="margin-bottom: 2.5rem;">Will you be my girlfriend?</p>
+            <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+                <button id="yesBtn" class="btn-primary" style="width: 100%; max-width: 280px;">Yes ❤️</button>
+                <button id="maybeBtn" class="btn-ghost" style="width: 100%; max-width: 280px;">I need a moment...</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 7: YES!                                  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneYes" class="scene hidden">
+        <div style="text-align: center; max-width: 500px; position: relative; z-index: 2;">
+            <p class="text-hero serif" style="margin-bottom: 1rem;">Wait, really?</p>
+            <p class="text-heading serif" id="yesLine2" style="margin-bottom: 1rem;">You just made me so happy.</p>
+            <p class="text-body">I can't wait for what's next.</p>
+        </div>
+        <div id="celebrationCanvas" style="position: absolute; inset: 0; z-index: 1; overflow: hidden;"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 8: MAYBE                                 -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneMaybe" class="scene hidden">
+        <div style="text-align: center; max-width: 450px;">
+            <p id="maybeMessage" style="font-family: var(--font-serif); font-size: clamp(1.2rem, 3vw, 1.5rem); font-style: italic; margin-bottom: 2rem;">That's completely okay. Take all the time you need.</p>
+            <button id="returnBtn" class="btn-ghost">← Go back</button>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- LIGHTBOX                                       -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div id="lightbox" class="lightbox-overlay">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+        <img id="lightboxImg" src="" alt="">
+        <p id="lightboxCaption" class="lightbox-caption"></p>
     </div>
-  </main>
 
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECRET TRIGGER (subtle)                        -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <button id="secretTrigger" style="position: fixed; bottom: 1.5rem; right: 1.5rem; width: 36px; height: 36px; border-radius: 50%; background: transparent; border: none; cursor: pointer; opacity: 0.2; z-index: 50; font-size: 1.1rem; transition: opacity 0.4s;" title="✨" aria-label="Secret">✨</button>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCRIPTS                                        -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,65 +1,95 @@
-# Just For You ❤️
+# Just For You ✨
 
-> A tiny interactive love story, made for one person.
+> Create a tiny interactive experience for someone special.
 
-## 🎯 What is this?
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-A beautiful, personal website you can customize to ask someone special a question. Not a generic template — an experience that feels like you built a tiny world just for them.
+<p align="center">
+  <img src="screenshots/preview.gif" alt="Preview" width="600">
+</p>
 
-## 🚀 How to use
+---
 
-1. **Fork** this repository
-2. **Open `config.js`** and change the name, messages, and memories
-3. **Add your photos** to `assets/images/`
-4. **Open `index.html`** in your browser to preview
-5. **Deploy** for free (see below)
-6. **Send the link** to your person
+## What is this?
 
-## ✏️ Customize
+A personal, interactive website you can customize and send to someone you care about. It takes them through a beautiful story — memories, photos, a letter, and a question. Built to feel like you made it just for them.
 
-Everything personal lives in `config.js`:
+## ✨ Features
 
-- Change the name
-- Write your own memories
-- Add your photos
-- Write a personal letter
-- Customize the question
-- Change all messages
+- Cinematic opening with their name
+- Personal memory timeline with photos
+- Interactive playful moment
+- Full-screen personal letter
+- Respectful proposal interaction
+- Celebration animation
+- Hidden secret message
+- Optional background music
+- Works beautifully on mobile
+- Free to deploy
 
-No coding needed!
+## 🚀 Quick Start
+ork → Customize → Deploy → Send
 
-## 📦 Deploy (Free)
+text
 
-**GitHub Pages:**
-1. Push to GitHub
-2. Settings → Pages → Deploy from main branch
-3. Done!
+### 1. Fork this repo
+Click the Fork button above.
 
-**Netlify:**
-1. Drag your folder to netlify.com
-2. Done!
+### 2. Customize `config.js`
+Open `config.js` and change:
+- Their name
+- Your memories
+- Your letter
+- Your question
 
-**Cloudflare Pages:**
-1. Connect your GitHub repo
-2. Deploy
-3. Done!
+### 3. Add photos
+Put your photos in `assets/images/` and update the paths in `config.js`.
 
-## 📸 Add Photos
+### 4. Deploy (free)
 
-1. Put your photos in `assets/images/`
-2. Update the file names in `config.js`
-3. Recommended: 1200×800px, under 500KB
+| Platform | Time |
+|----------|------|
+| **GitHub Pages** | 1 min |
+| **Netlify** | 1 min |
+| **Vercel** | 1 min |
+| **Cloudflare Pages** | 1 min |
 
-## 🎵 Add Music (Optional)
+### 5. Send the link 💌
 
-1. Add an MP3 file to `assets/music/`
-2. Set `music.enabled = true` in `config.js`
-3. Update the file name
+---
 
-## 🤝 Contributing
+## 💌 Customization
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+Everything lives in one file: **`config.js`**
 
-## 📄 License
+```javascript
+const story = {
+    person: { name: "Her Name" },
+    memories: [ ... ],
+    letter: "Your letter here...",
+    question: "Will you be my girlfriend?",
+    // ... and more
+};
+No coding needed. Change the text, add photos, and you're done.
 
-MIT — do whatever you want with it.
+📸 Screenshots
+Opening	Memories	Question	Yes!
+https://screenshots/hero.png	https://screenshots/story.png	https://screenshots/proposal.png	https://screenshots/yes.png
+🛠 Built With
+HTML5
+
+Tailwind CSS
+
+Vanilla JavaScript
+
+No frameworks, no build tools
+
+🤝 Contributing
+We welcome contributions! See CONTRIBUTING.md for ideas.
+
+Ideas: themes, translations, new scenes, accessibility, documentation.
+
+⭐ Support
+If this helped you create something special, a star means a lot.
+

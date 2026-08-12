@@ -1,79 +1,92 @@
-// ✦ JUST FOR YOU - Personalization File ✦
-// Change everything below to make it yours
+// ✦ JUST FOR YOU — Make it yours in 5 minutes ✦
+// Change everything between the quotes and brackets below
 
-window.proposal = {
-    name: "Her Name",
-    
-    intro: {
-        title: "Hey, Her Name.",
-        subtitle: "I made something just for you."
+const story = {
+    // 👤 WHO IS THIS FOR?
+    person: {
+        name: "Her Name",
+        pronoun: "her" // her / him / them
     },
-    
-    personalMessage: {
-        line1: "This isn't something I made for everyone.",
-        line2: "I made it for you."
+
+    // 💭 FIRST IMPRESSION (they see this first)
+    opening: {
+        line1: "Hey, Her Name.",
+        line2: "I made something for you.",
+        buttonText: "See what's inside →"
     },
-    
+
+    // 📸 YOUR MEMORIES TOGETHER (add as many as you want)
     memories: [
         {
+            date: "March 2026",
             title: "The day we met",
-            date: "2026",
-            text: "I still remember how you walked in and everything felt different.",
-            image: "assets/images/placeholder-1.jpg"
+            description: "You walked in and suddenly the room felt different. I still remember exactly what you were wearing.",
+            image: "assets/images/memory-1.jpg"
         },
         {
-            title: "That coffee shop",
-            date: "2026",
-            text: "We talked for hours and I didn't want it to end.",
-            image: "assets/images/placeholder-2.jpg"
+            date: "April 2026", 
+            title: "Coffee & conversations",
+            description: "Three hours felt like three minutes. I knew then that talking to you was my new favorite thing.",
+            image: "assets/images/memory-2.jpg"
         },
         {
-            title: "The sunset",
-            date: "2026",
-            text: "That's when I knew.",
-            image: "assets/images/placeholder-3.jpg"
+            date: "May 2026",
+            title: "That sunset",
+            description: "We didn't say much. We didn't need to. That's when I realized.",
+            image: "assets/images/memory-3.jpg"
         }
     ],
-    
+
+    // 🎮 PLAYFUL MOMENT (optional — lightens the mood)
     playful: {
-        question: "Okay, important question...",
-        subtitle: "What do I like more?",
-        option1: "Food 🍜",
-        option2: "Talking to you",
-        response1: "Wrong answer. But I appreciate the honesty. 😄",
-        response2: "Obviously. Nothing else comes close."
+        enabled: true,
+        question: "Quick question...",
+        optionA: "Pizza 🍕",
+        optionB: "Talking to you",
+        responseA: "Wrong. But I respect your honesty.",
+        responseB: "Obviously. It's not even close."
     },
-    
-    letter: `Somewhere along the way,
-you became someone really special to me.
 
-I find myself smiling at my phone like an idiot when I see your messages.
-I catch myself thinking about our conversations hours later.
-I started noticing the little things about you.
+    // 💌 YOUR LETTER (write from the heart — keep it real)
+    letter: `I don't know exactly when it happened.
 
-And every time we talk, I just want a little more time.
+Somewhere between the late-night conversations and the stupid jokes, between the random voice messages and the way you laugh at things that aren't even that funny — somewhere in there, you became really important to me.
 
-I don't know exactly when it happened.
-But somewhere between the conversations and the laughs,
-you became my favorite person.`,
-    
+I started looking forward to my phone buzzing. I started saving things to tell you later. I started noticing small things about you that I couldn't stop thinking about.
+
+What I'm trying to say is — you're not just someone I talk to. You're someone I care about. A lot. And I wanted you to know that in a way that felt a little more special than just a text message.
+
+So I built this. Just for you.`,
+
+    // 💭 BUILDUP (right before the question)
     buildup: {
-        line1: "There's something I've been wanting to tell you.",
-        line2: "I really like you.",
-        line3: "And I've been wondering..."
+        line1: "So I've been thinking...",
+        line2: "About you. About us.",
+        line3: "And there's something I want to ask you."
     },
-    
+
+    // ❤️ THE QUESTION
     question: "Will you be my girlfriend?",
-    
-    yesMessage: "You just made me really happy. ❤️",
-    yesFollowUp: "I can't wait to make more memories with you.",
-    
-    maybeMessage: "Of course. Take your time. ❤️",
-    
-    secretMessage: "Psst... you're really cute, you know.",
-    
+
+    // 🎉 IF THEY SAY YES
+    yes: {
+        line1: "Wait, really?",
+        line2: "You just made me so happy.",
+        line3: "I can't wait for what's next."
+    },
+
+    // 💛 IF THEY NEED TIME
+    maybe: {
+        message: "That's completely okay. Take all the time you need. I'm not going anywhere."
+    },
+
+    // 🎵 MUSIC (optional — add an mp3 file to assets/music/)
     music: {
         enabled: false,
-        file: "assets/music/song.mp3"
-    }
+        file: "assets/music/your-song.mp3",
+        volume: 0.3
+    },
+
+    // 🤫 SECRET MESSAGE (hidden easter egg)
+    secret: "Psst... you're really cute when you're curious."
 };
