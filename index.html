@@ -3,77 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="A tiny interactive experience for someone special.">
     <title>Just For You</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* ─── FONTS ─────────────────────────────────── */
         @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
         
-        /* ─── RESET & BASE ──────────────────────────── */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        :root {
-            --bg: #0a0a0b;
-            --text: #e8e4df;
-            --text-muted: #9c958b;
-            --accent: #d4a574;
-            --accent-soft: #c4956a;
-            --card-bg: rgba(255,255,255,0.02);
-            --border: rgba(255,255,255,0.06);
-            --font-serif: 'EB Garamond', 'Times New Roman', serif;
-            --font-sans: 'Inter', -apple-system, sans-serif;
-            --transition: 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
-        }
-        
-        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: var(--font-sans);
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0a0b;
+            color: #e8e4df;
             min-height: 100vh;
-            min-height: 100dvh;
             overflow-x: hidden;
         }
         
-        /* ─── SCENE SYSTEM ──────────────────────────── */
+        .serif { font-family: 'EB Garamond', 'Times New Roman', serif; }
+        
+        /* SCENE SYSTEM */
         .scene {
             position: fixed;
-            inset: 0;
-            display: flex;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 2rem 1.5rem;
             opacity: 0;
-            pointer-events: none;
-            transition: opacity var(--transition);
+            transition: opacity 0.6s ease;
             overflow-y: auto;
             z-index: 1;
         }
         
-        /* THIS IS THE CRITICAL FIX */
-        .scene.hidden {
-            display: none !important;
-        }
-        
         .scene.active {
+            display: flex;
             opacity: 1;
-            pointer-events: auto;
             z-index: 2;
-            display: flex !important;
         }
         
-        /* ─── TYPOGRAPHY ────────────────────────────── */
-        .serif { font-family: var(--font-serif); }
+        /* TYPOGRAPHY */
         .text-hero { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
-        .text-heading { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; }
-        .text-body { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--text-muted); max-width: 480px; }
-        .text-question { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+        .text-heading { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; line-height: 1.2; }
+        .text-body { font-size: clamp(1rem, 2vw, 1.15rem); color: #9c958b; max-width: 480px; }
+        .text-question { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.15; }
         
-        /* ─── BUTTONS ────────────────────────────────── */
+        /* BUTTONS */
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -81,20 +57,16 @@
             padding: 0.9rem 2.4rem;
             background: rgba(255,255,255,0.06);
             border: 1px solid rgba(255,255,255,0.15);
-            color: var(--text);
+            color: #e8e4df;
             border-radius: 100px;
             font-size: 1rem;
-            font-family: var(--font-sans);
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             min-height: 48px;
-            min-width: 48px;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
         }
-        .btn-primary:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
+        .btn-primary:hover { background: rgba(255,255,255,0.12); }
         .btn-primary:active { transform: scale(0.97); }
-        .btn-primary:disabled { opacity: 0.4; pointer-events: none; }
+        .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
         
         .btn-ghost {
             display: inline-flex;
@@ -103,17 +75,16 @@
             padding: 0.7rem 1.8rem;
             background: transparent;
             border: 1px solid rgba(255,255,255,0.08);
-            color: var(--text-muted);
+            color: #9c958b;
             border-radius: 100px;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             min-height: 48px;
-            user-select: none;
         }
-        .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+        .btn-ghost:hover { color: #e8e4df; border-color: rgba(255,255,255,0.2); }
         
-        /* ─── MEMORY CARDS ───────────────────────────── */
+        /* MEMORY CARDS */
         .memory-card {
             display: grid;
             grid-template-columns: 1fr;
@@ -121,42 +92,14 @@
             padding: 2rem 0;
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            transition-delay: var(--delay, 0s);
+            transition: all 0.8s ease;
         }
         .memory-card.visible { opacity: 1; transform: translateY(0); }
-        
-        .memory-date {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-        .memory-title { 
-            font-family: var(--font-serif); 
-            font-size: clamp(1.5rem, 3vw, 2rem); 
-            font-weight: 400; 
-            margin-bottom: 0.75rem;
-        }
-        .memory-text { 
-            color: var(--text-muted); 
-            line-height: 1.7; 
-            max-width: 500px; 
-            margin-bottom: 1rem;
-        }
-        .memory-image-wrap {
-            border-radius: 4px;
-            overflow: hidden;
-            cursor: pointer;
-            aspect-ratio: 4/3;
-        }
-        .memory-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
-        }
+        .memory-date { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: #d4a574; }
+        .memory-title { font-family: 'EB Garamond', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; }
+        .memory-text { color: #9c958b; line-height: 1.7; }
+        .memory-image-wrap { border-radius: 4px; overflow: hidden; cursor: pointer; aspect-ratio: 4/3; }
+        .memory-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
         .memory-image-wrap:hover .memory-image { transform: scale(1.03); }
         
         @media (min-width: 640px) {
@@ -165,10 +108,9 @@
             .memory-card:nth-child(even) .memory-image-wrap { order: 1; }
         }
         
-        /* ─── LIGHTBOX ────────────────────────────────── */
+        /* LIGHTBOX */
         .lightbox-overlay {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(0,0,0,0.94);
             z-index: 100;
             display: flex;
@@ -177,42 +119,22 @@
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease;
         }
         .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
-        .lightbox-overlay img {
-            max-width: 90vw;
-            max-height: 75vh;
-            border-radius: 4px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-        }
-        .lightbox-caption {
-            margin-top: 1rem;
-            color: var(--text-muted);
-            font-style: italic;
-            font-family: var(--font-serif);
-        }
+        .lightbox-overlay img { max-width: 90vw; max-height: 75vh; border-radius: 4px; }
+        .lightbox-caption { margin-top: 1rem; color: #9c958b; font-style: italic; }
         .lightbox-close {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-            cursor: pointer;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            border: none;
+            position: absolute; top: 1.5rem; right: 1.5rem;
+            width: 44px; height: 44px;
+            font-size: 1.5rem; color: white;
+            cursor: pointer; border-radius: 50%;
+            background: rgba(255,255,255,0.05); border: none;
         }
         
-        /* ─── CELEBRATION PARTICLES ──────────────────── */
+        /* PARTICLES */
         .particle {
-            position: absolute;
-            border-radius: 50%;
+            position: absolute; border-radius: 50%;
             pointer-events: none;
             animation: floatUp 4s ease-out forwards;
         }
@@ -221,43 +143,35 @@
             100% { opacity: 0; transform: translateY(-60vh) scale(0); }
         }
         
-        /* ─── SECRET TOAST ────────────────────────────── */
+        /* SECRET TOAST */
         .secret-toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
+            position: fixed; bottom: 2rem; left: 50%;
             transform: translateX(-50%);
             background: rgba(0,0,0,0.9);
-            border: 1px solid var(--border);
-            padding: 1.5rem 2rem;
-            border-radius: 16px;
-            text-align: center;
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 1.5rem 2rem; border-radius: 16px;
             z-index: 200;
-            animation: fadeInUp 0.5s ease;
-            font-family: var(--font-serif);
+            font-family: 'EB Garamond', serif;
             font-style: italic;
+            animation: fadeInUp 0.5s ease;
         }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateX(-50%) translateY(20px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         
-        /* ─── REDUCED MOTION ─────────────────────────── */
-        .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
-            animation-duration: 0.01ms !important;
-            transition-duration: 0.01ms !important;
-        }
-        
-        /* ─── MOBILE FIXES ───────────────────────────── */
-        @media (max-width: 400px) {
-            .scene { padding: 1.5rem 1rem; }
-            .btn-primary { padding: 0.8rem 1.8rem; font-size: 0.95rem; }
+        /* REDUCED MOTION */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- SCENE 0: OPENING -->
+    <!-- OPENING -->
     <section id="sceneOpening" class="scene active">
         <div style="text-align: center; max-width: 600px;">
             <p class="text-hero serif" id="openingLine1" style="margin-bottom: 0.5rem;">Hey, Her Name.</p>
@@ -266,36 +180,36 @@
         </div>
     </section>
 
-    <!-- SCENE 1: PERSONAL -->
-    <section id="scenePersonal" class="scene hidden">
+    <!-- PERSONAL -->
+    <section id="scenePersonal" class="scene">
         <div style="text-align: center; max-width: 500px;">
             <p class="text-heading serif" style="margin-bottom: 1rem;">This isn't something I made for everyone.</p>
             <p class="text-body" style="font-style: italic;">I made it just for you.</p>
         </div>
     </section>
 
-    <!-- SCENE 2: MEMORIES -->
-    <section id="sceneMemories" class="scene hidden">
+    <!-- MEMORIES -->
+    <section id="sceneMemories" class="scene">
         <div style="width: 100%; max-width: 900px; padding: 4rem 0;">
             <p class="text-heading serif" style="margin-bottom: 3rem; text-align: center;">Remember these?</p>
             <div id="memoriesContainer"></div>
         </div>
     </section>
 
-    <!-- SCENE 3: PLAYFUL -->
-    <section id="scenePlayful" class="scene hidden">
+    <!-- PLAYFUL -->
+    <section id="scenePlayful" class="scene">
         <div style="text-align: center; max-width: 500px;">
             <p class="text-heading serif" id="playfulQuestion" style="margin-bottom: 2rem;">Quick question...</p>
             <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
                 <button id="optA" class="btn-primary" style="width: 100%; max-width: 280px;">Pizza 🍕</button>
                 <button id="optB" class="btn-ghost" style="width: 100%; max-width: 280px;">Talking to you</button>
             </div>
-            <p id="playfulResponse" style="margin-top: 1.5rem; font-style: italic; opacity: 0; transition: opacity 0.5s ease; font-family: var(--font-serif);"></p>
+            <p id="playfulResponse" style="margin-top: 1.5rem; font-style: italic; opacity: 0; transition: opacity 0.5s ease; font-family: 'EB Garamond', serif;"></p>
         </div>
     </section>
 
-    <!-- SCENE 4: BUILDUP -->
-    <section id="sceneBuildup" class="scene hidden">
+    <!-- BUILDUP -->
+    <section id="sceneBuildup" class="scene">
         <div style="text-align: center; max-width: 500px;">
             <p class="text-heading serif" style="margin-bottom: 1.5rem;">So I've been thinking...</p>
             <p class="text-body" style="margin-bottom: 1rem;">About you. About us.</p>
@@ -303,15 +217,15 @@
         </div>
     </section>
 
-    <!-- SCENE 5: LETTER -->
-    <section id="sceneLetter" class="scene hidden">
+    <!-- LETTER -->
+    <section id="sceneLetter" class="scene">
         <div style="max-width: 550px; text-align: left;">
-            <p id="letterBody" style="font-family: var(--font-serif); font-size: clamp(1.1rem, 2.5vw, 1.3rem); line-height: 1.9; font-style: italic; color: var(--text); white-space: pre-line;"></p>
+            <p id="letterBody" style="font-family: 'EB Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.3rem); line-height: 1.9; font-style: italic; white-space: pre-line;"></p>
         </div>
     </section>
 
-    <!-- SCENE 6: QUESTION -->
-    <section id="sceneQuestion" class="scene hidden">
+    <!-- QUESTION -->
+    <section id="sceneQuestion" class="scene">
         <div style="text-align: center; max-width: 500px;">
             <p class="text-question serif" id="questionText" style="margin-bottom: 2.5rem;">Will you be my girlfriend?</p>
             <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
@@ -321,8 +235,8 @@
         </div>
     </section>
 
-    <!-- SCENE 7: YES -->
-    <section id="sceneYes" class="scene hidden">
+    <!-- YES -->
+    <section id="sceneYes" class="scene">
         <div style="text-align: center; max-width: 500px; position: relative; z-index: 2;">
             <p class="text-hero serif" style="margin-bottom: 1rem;">Wait, really?</p>
             <p class="text-heading serif" id="yesLine2" style="margin-bottom: 1rem;">You just made me so happy.</p>
@@ -331,25 +245,24 @@
         <div id="celebrationCanvas" style="position: absolute; inset: 0; z-index: 1; overflow: hidden;"></div>
     </section>
 
-    <!-- SCENE 8: MAYBE -->
-    <section id="sceneMaybe" class="scene hidden">
+    <!-- MAYBE -->
+    <section id="sceneMaybe" class="scene">
         <div style="text-align: center; max-width: 450px;">
-            <p id="maybeMessage" style="font-family: var(--font-serif); font-size: clamp(1.2rem, 3vw, 1.5rem); font-style: italic; margin-bottom: 2rem;">That's completely okay. Take all the time you need.</p>
+            <p id="maybeMessage" style="font-family: 'EB Garamond', serif; font-size: clamp(1.2rem, 3vw, 1.5rem); font-style: italic; margin-bottom: 2rem;">That's completely okay.</p>
             <button id="returnBtn" class="btn-ghost">← Go back</button>
         </div>
     </section>
 
     <!-- LIGHTBOX -->
     <div id="lightbox" class="lightbox-overlay">
-        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
         <img id="lightboxImg" src="" alt="">
         <p id="lightboxCaption" class="lightbox-caption"></p>
     </div>
 
-    <!-- SECRET TRIGGER -->
-    <button id="secretTrigger" style="position: fixed; bottom: 1.5rem; right: 1.5rem; width: 36px; height: 36px; border-radius: 50%; background: transparent; border: none; cursor: pointer; opacity: 0.2; z-index: 50; font-size: 1.1rem; transition: opacity 0.4s;" title="✨" aria-label="Secret">✨</button>
+    <!-- SECRET -->
+    <button id="secretTrigger" style="position: fixed; bottom: 1.5rem; right: 1.5rem; width: 36px; height: 36px; border-radius: 50%; background: transparent; border: none; cursor: pointer; opacity: 0.2; z-index: 50; font-size: 1.1rem;">✨</button>
 
-    <!-- SCRIPTS - ORDER MATTERS! -->
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
