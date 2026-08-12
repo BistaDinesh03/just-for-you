@@ -1,43 +1,43 @@
 // ✦ JUST FOR YOU — Make it yours in 5 minutes ✦
 // Change everything between the quotes and brackets below
 
-const story = {
+window.story = {
     // 👤 WHO IS THIS FOR?
     person: {
         name: "Her Name",
-        pronoun: "her" // her / him / them
+        pronoun: "her"
     },
 
-    // 💭 FIRST IMPRESSION (they see this first)
+    // 💭 FIRST IMPRESSION
     opening: {
         line1: "Hey, Her Name.",
         line2: "I made something for you.",
         buttonText: "See what's inside →"
     },
 
-    // 📸 YOUR MEMORIES TOGETHER (add as many as you want)
+    // 📸 YOUR MEMORIES
     memories: [
         {
             date: "March 2026",
             title: "The day we met",
             description: "You walked in and suddenly the room felt different. I still remember exactly what you were wearing.",
-            image: "assets/images/memory-1.jpg"
+            image: "assets/images/placeholder-1.jpg"
         },
         {
-            date: "April 2026", 
+            date: "April 2026",
             title: "Coffee & conversations",
             description: "Three hours felt like three minutes. I knew then that talking to you was my new favorite thing.",
-            image: "assets/images/memory-2.jpg"
+            image: "assets/images/placeholder-2.jpg"
         },
         {
             date: "May 2026",
             title: "That sunset",
             description: "We didn't say much. We didn't need to. That's when I realized.",
-            image: "assets/images/memory-3.jpg"
+            image: "assets/images/placeholder-3.jpg"
         }
     ],
 
-    // 🎮 PLAYFUL MOMENT (optional — lightens the mood)
+    // 🎮 PLAYFUL MOMENT
     playful: {
         enabled: true,
         question: "Quick question...",
@@ -47,7 +47,7 @@ const story = {
         responseB: "Obviously. It's not even close."
     },
 
-    // 💌 YOUR LETTER (write from the heart — keep it real)
+    // 💌 YOUR LETTER
     letter: `I don't know exactly when it happened.
 
 Somewhere between the late-night conversations and the stupid jokes, between the random voice messages and the way you laugh at things that aren't even that funny — somewhere in there, you became really important to me.
@@ -58,7 +58,7 @@ What I'm trying to say is — you're not just someone I talk to. You're someone 
 
 So I built this. Just for you.`,
 
-    // 💭 BUILDUP (right before the question)
+    // 💭 BUILDUP
     buildup: {
         line1: "So I've been thinking...",
         line2: "About you. About us.",
@@ -80,13 +80,13 @@ So I built this. Just for you.`,
         message: "That's completely okay. Take all the time you need. I'm not going anywhere."
     },
 
-    // 🎵 MUSIC (optional — add an mp3 file to assets/music/)
+    // 🎵 MUSIC (optional)
     music: {
         enabled: false,
         file: "assets/music/your-song.mp3",
         volume: 0.3
     },
 
-    // 🤫 SECRET MESSAGE (hidden easter egg)
+    // 🤫 SECRET MESSAGE
     secret: "Psst... you're really cute when you're curious."
 };

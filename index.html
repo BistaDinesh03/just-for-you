@@ -54,14 +54,16 @@
             z-index: 1;
         }
         
+        /* THIS IS THE CRITICAL FIX */
+        .scene.hidden {
+            display: none !important;
+        }
+        
         .scene.active {
             opacity: 1;
             pointer-events: auto;
             z-index: 2;
-        }
-        
-        .scene.hidden {
-            display: none;
+            display: flex !important;
         }
         
         /* ─── TYPOGRAPHY ────────────────────────────── */
@@ -88,6 +90,7 @@
             min-height: 48px;
             min-width: 48px;
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         .btn-primary:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
         .btn-primary:active { transform: scale(0.97); }
@@ -106,6 +109,7 @@
             cursor: pointer;
             transition: all 0.4s ease;
             min-height: 48px;
+            user-select: none;
         }
         .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
         
@@ -127,9 +131,20 @@
             text-transform: uppercase;
             letter-spacing: 0.15em;
             color: var(--accent);
+            margin-bottom: 0.5rem;
         }
-        .memory-title { font-family: var(--font-serif); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; }
-        .memory-text { color: var(--text-muted); line-height: 1.7; max-width: 500px; }
+        .memory-title { 
+            font-family: var(--font-serif); 
+            font-size: clamp(1.5rem, 3vw, 2rem); 
+            font-weight: 400; 
+            margin-bottom: 0.75rem;
+        }
+        .memory-text { 
+            color: var(--text-muted); 
+            line-height: 1.7; 
+            max-width: 500px; 
+            margin-bottom: 1rem;
+        }
         .memory-image-wrap {
             border-radius: 4px;
             overflow: hidden;
@@ -242,9 +257,7 @@
 </head>
 <body>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 0: OPENING                              -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 0: OPENING -->
     <section id="sceneOpening" class="scene active">
         <div style="text-align: center; max-width: 600px;">
             <p class="text-hero serif" id="openingLine1" style="margin-bottom: 0.5rem;">Hey, Her Name.</p>
@@ -253,9 +266,7 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 1: PERSONAL MESSAGE                      -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 1: PERSONAL -->
     <section id="scenePersonal" class="scene hidden">
         <div style="text-align: center; max-width: 500px;">
             <p class="text-heading serif" style="margin-bottom: 1rem;">This isn't something I made for everyone.</p>
@@ -263,9 +274,7 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 2: MEMORIES                              -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 2: MEMORIES -->
     <section id="sceneMemories" class="scene hidden">
         <div style="width: 100%; max-width: 900px; padding: 4rem 0;">
             <p class="text-heading serif" style="margin-bottom: 3rem; text-align: center;">Remember these?</p>
@@ -273,9 +282,7 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 3: PLAYFUL (optional)                     -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 3: PLAYFUL -->
     <section id="scenePlayful" class="scene hidden">
         <div style="text-align: center; max-width: 500px;">
             <p class="text-heading serif" id="playfulQuestion" style="margin-bottom: 2rem;">Quick question...</p>
@@ -287,9 +294,7 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 4: BUILDUP                               -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 4: BUILDUP -->
     <section id="sceneBuildup" class="scene hidden">
         <div style="text-align: center; max-width: 500px;">
             <p class="text-heading serif" style="margin-bottom: 1.5rem;">So I've been thinking...</p>
@@ -298,18 +303,14 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 5: LETTER                                -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 5: LETTER -->
     <section id="sceneLetter" class="scene hidden">
         <div style="max-width: 550px; text-align: left;">
             <p id="letterBody" style="font-family: var(--font-serif); font-size: clamp(1.1rem, 2.5vw, 1.3rem); line-height: 1.9; font-style: italic; color: var(--text); white-space: pre-line;"></p>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 6: THE QUESTION                          -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 6: QUESTION -->
     <section id="sceneQuestion" class="scene hidden">
         <div style="text-align: center; max-width: 500px;">
             <p class="text-question serif" id="questionText" style="margin-bottom: 2.5rem;">Will you be my girlfriend?</p>
@@ -320,9 +321,7 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 7: YES!                                  -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 7: YES -->
     <section id="sceneYes" class="scene hidden">
         <div style="text-align: center; max-width: 500px; position: relative; z-index: 2;">
             <p class="text-hero serif" style="margin-bottom: 1rem;">Wait, really?</p>
@@ -332,9 +331,7 @@
         <div id="celebrationCanvas" style="position: absolute; inset: 0; z-index: 1; overflow: hidden;"></div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 8: MAYBE                                 -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 8: MAYBE -->
     <section id="sceneMaybe" class="scene hidden">
         <div style="text-align: center; max-width: 450px;">
             <p id="maybeMessage" style="font-family: var(--font-serif); font-size: clamp(1.2rem, 3vw, 1.5rem); font-style: italic; margin-bottom: 2rem;">That's completely okay. Take all the time you need.</p>
@@ -342,23 +339,17 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- LIGHTBOX                                       -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- LIGHTBOX -->
     <div id="lightbox" class="lightbox-overlay">
         <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
         <img id="lightboxImg" src="" alt="">
         <p id="lightboxCaption" class="lightbox-caption"></p>
     </div>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SECRET TRIGGER (subtle)                        -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECRET TRIGGER -->
     <button id="secretTrigger" style="position: fixed; bottom: 1.5rem; right: 1.5rem; width: 36px; height: 36px; border-radius: 50%; background: transparent; border: none; cursor: pointer; opacity: 0.2; z-index: 50; font-size: 1.1rem; transition: opacity 0.4s;" title="✨" aria-label="Secret">✨</button>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCRIPTS                                        -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCRIPTS - ORDER MATTERS! -->
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>

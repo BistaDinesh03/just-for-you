@@ -2,31 +2,44 @@
 (function() {
     'use strict';
 
-    // ─── Wait for everything to load ───────────────────
-    window.addEventListener('DOMContentLoaded', () => {
-        
+    // Wait for DOM and config to be ready
+    function init() {
+        // ─── Get config ──────────────────────────────
         const s = window.story;
         if (!s) {
             console.error('❌ config.js missing. Make sure config.js loads before script.js');
             return;
         }
+        console.log('✅ Story config loaded for:', s.person?.name);
 
-        // ─── Cache DOM elements ─────────────────────────
-        const $ = (id) => document.getElementById(id);
-        const qs = (sel) => document.querySelector(sel);
-        
-        // ─── Populate text from config ──────────────────
-        const setText = (id, text) => { const el = $(id); if (el && text) el.textContent = text; };
-        
+        // ─── Helper: get element by ID ───────────────
+        const $ = function(id) {
+            const el = document.getElementById(id);
+            if (!el) console.warn('⚠️ Element not found: #' + id);
+            return el;
+        };
+
+        // ─── Helper: set text content ────────────────
+        const setText = function(id, text) {
+            const el = $(id);
+            if (el && text !== undefined && text !== null) {
+                el.textContent = text;
+            }
+        };
+
+        // ─── Populate ALL text from config ───────────
         setText('openingLine1', s.opening?.line1);
         setText('openingLine2', s.opening?.line2);
-        const enterBtn = $('enterBtn');
-        if (enterBtn && s.opening?.buttonText) enterBtn.textContent = s.opening.buttonText;
         
+        const enterBtn = $('enterBtn');
+        if (enterBtn && s.opening?.buttonText) {
+            enterBtn.textContent = s.opening.buttonText;
+        }
+
         setText('questionText', s.question);
         setText('yesLine2', s.yes?.line2);
         setText('letterBody', s.letter);
-        
+
         if (s.playful?.enabled) {
             setText('playfulQuestion', s.playful.question);
             setText('optA', s.playful.optionA);
@@ -35,99 +48,124 @@
             const playfulScene = $('scenePlayful');
             if (playfulScene) playfulScene.style.display = 'none';
         }
-        
-        // ─── Scene Management ───────────────────────────
-        const scenes = [
-            'sceneOpening', 'scenePersonal', 'sceneMemories',
-            'scenePlayful', 'sceneBuildup', 'sceneLetter',
-            'sceneQuestion', 'sceneYes', 'sceneMaybe'
+
+        // ─── Scene Management ────────────────────────
+        const sceneIds = [
+            'sceneOpening',
+            'scenePersonal',
+            'sceneMemories',
+            'scenePlayful',
+            'sceneBuildup',
+            'sceneLetter',
+            'sceneQuestion',
+            'sceneYes',
+            'sceneMaybe'
         ];
-        
-        let currentScene = -1;
-        
-        function goTo(index) {
-            if (index < 0 || index >= scenes.length) return;
-            if (index === currentScene) return;
-            
-            // Hide current
-            if (currentScene >= 0) {
-                const prev = $(scenes[currentScene]);
-                if (prev) {
-                    prev.style.opacity = '0';
-                    prev.style.pointerEvents = 'none';
-                    setTimeout(() => { prev.classList.add('hidden'); }, 600);
+
+        let currentSceneId = null;
+
+        function showScene(sceneId) {
+            // Hide all scenes first
+            sceneIds.forEach(function(id) {
+                const el = $(id);
+                if (el) {
+                    el.classList.remove('active');
+                    el.classList.add('hidden');
                 }
+            });
+
+            // Show the target scene
+            const target = $(sceneId);
+            if (!target) {
+                console.error('❌ Scene not found:', sceneId);
+                return;
             }
-            
-            // Show next
-            const next = $(scenes[index]);
-            if (next) {
-                next.classList.remove('hidden');
-                // Force reflow for transition
-                next.offsetHeight;
-                next.style.opacity = '1';
-                next.style.pointerEvents = 'auto';
-            }
-            
-            currentScene = index;
+
+            target.classList.remove('hidden');
+            // Force browser reflow for transition to work
+            target.offsetHeight;
+            target.classList.add('active');
+
+            currentSceneId = sceneId;
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
+
+            console.log('📍 Showing scene:', sceneId);
+
             // Trigger celebration if yes scene
-            if (scenes[index] === 'sceneYes') celebrate();
+            if (sceneId === 'sceneYes') {
+                celebrate();
+            }
         }
-        
-        // ─── Opening Button ─────────────────────────────
+
+        // ─── Entry Button ────────────────────────────
         if (enterBtn) {
             enterBtn.addEventListener('click', function() {
+                console.log('🖱️ Enter button clicked');
                 this.textContent = '...';
                 this.disabled = true;
-                setTimeout(() => goTo(1), 500);
-                // Auto advance through personal message
-                setTimeout(() => goTo(2), 3500);
+
+                // Go to personal message
+                setTimeout(function() {
+                    showScene('scenePersonal');
+                }, 400);
+
+                // Auto-advance to memories after pause
+                setTimeout(function() {
+                    showScene('sceneMemories');
+                }, 3500);
             });
+            console.log('✅ Enter button listener attached');
+        } else {
+            console.error('❌ Enter button not found!');
         }
-        
-        // ─── Build Memory Timeline ──────────────────────
+
+        // ─── Build Memory Cards ──────────────────────
         const memoriesContainer = $('memoriesContainer');
-        if (memoriesContainer && s.memories) {
-            s.memories.forEach((memory, i) => {
+        if (memoriesContainer && s.memories && s.memories.length > 0) {
+            s.memories.forEach(function(memory, i) {
                 const card = document.createElement('article');
                 card.className = 'memory-card';
-                card.style.setProperty('--delay', `${i * 0.15}s`);
-                card.innerHTML = `
-                    <div class="memory-date">${memory.date}</div>
-                    <h3 class="memory-title">${memory.title}</h3>
-                    <p class="memory-text">${memory.description}</p>
-                    <div class="memory-image-wrap">
-                        <img src="${memory.image}" alt="${memory.title}" loading="lazy" class="memory-image">
-                    </div>
-                `;
-                
-                // Click to open lightbox
-                card.querySelector('.memory-image').addEventListener('click', () => {
-                    openLightbox(memory.image, memory.title);
-                });
-                
+                card.style.setProperty('--delay', (i * 0.15) + 's');
+
+                card.innerHTML = 
+                    '<div class="memory-content">' +
+                        '<div class="memory-date">' + memory.date + '</div>' +
+                        '<h3 class="memory-title">' + memory.title + '</h3>' +
+                        '<p class="memory-text">' + memory.description + '</p>' +
+                    '</div>' +
+                    '<div class="memory-image-wrap">' +
+                        '<img src="' + memory.image + '" alt="' + memory.title + '" loading="lazy" class="memory-image">' +
+                    '</div>';
+
+                // Click image to open lightbox
+                const img = card.querySelector('.memory-image');
+                if (img) {
+                    img.addEventListener('click', function() {
+                        openLightbox(memory.image, memory.title);
+                    });
+                }
+
                 memoriesContainer.appendChild(card);
-                
+
                 // Reveal on scroll
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
+                const observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
                         if (entry.isIntersecting) {
                             entry.target.classList.add('visible');
                             observer.unobserve(entry.target);
                         }
                     });
-                }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+                }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
                 observer.observe(card);
             });
+            console.log('✅ Built ' + s.memories.length + ' memory cards');
         }
-        
-        // ─── Lightbox ────────────────────────────────────
+
+        // ─── Lightbox ────────────────────────────────
         const lightbox = $('lightbox');
         const lightboxImg = $('lightboxImg');
         const lightboxCaption = $('lightboxCaption');
-        
+
         window.openLightbox = function(src, caption) {
             if (!lightbox || !lightboxImg) return;
             lightboxImg.src = src;
@@ -135,13 +173,13 @@
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
         };
-        
+
         window.closeLightbox = function() {
             if (!lightbox) return;
             lightbox.classList.remove('active');
             document.body.style.overflow = '';
         };
-        
+
         if (lightbox) {
             lightbox.addEventListener('click', function(e) {
                 if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
@@ -149,143 +187,158 @@
                 }
             });
         }
-        
-        document.addEventListener('keydown', (e) => {
+
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeLightbox();
         });
-        
-        // ─── Playful Interaction ─────────────────────────
+
+        // ─── Playful Interaction ─────────────────────
         const optA = $('optA');
         const optB = $('optB');
         const playfulResponse = $('playfulResponse');
-        
+
         if (optA && s.playful?.enabled) {
-            optA.addEventListener('click', () => {
+            optA.addEventListener('click', function() {
                 if (playfulResponse) {
                     playfulResponse.textContent = s.playful.responseA;
-                    playfulResponse.classList.add('visible');
+                    playfulResponse.style.opacity = '1';
                 }
                 optA.disabled = true;
-                optB.disabled = true;
-                setTimeout(() => goTo(4), 2200);
+                if (optB) optB.disabled = true;
+                setTimeout(function() { showScene('sceneBuildup'); }, 2200);
             });
         }
-        
+
         if (optB && s.playful?.enabled) {
-            optB.addEventListener('click', () => {
+            optB.addEventListener('click', function() {
                 if (playfulResponse) {
                     playfulResponse.textContent = s.playful.responseB;
-                    playfulResponse.classList.add('visible');
+                    playfulResponse.style.opacity = '1';
                 }
                 optA.disabled = true;
-                optB.disabled = true;
-                setTimeout(() => goTo(4), 2200);
+                if (optB) optB.disabled = true;
+                setTimeout(function() { showScene('sceneBuildup'); }, 2200);
             });
         }
-        
-        // ─── Auto-advance Buildup → Letter ──────────────
+
+        // ─── Auto-advance: Buildup → Letter ──────────
         const buildupScene = $('sceneBuildup');
         if (buildupScene) {
-            new IntersectionObserver((entries) => {
+            const buildupObserver = new IntersectionObserver(function(entries) {
                 if (entries[0].isIntersecting) {
-                    setTimeout(() => goTo(5), 5000);
+                    setTimeout(function() { showScene('sceneLetter'); }, 5000);
+                    buildupObserver.unobserve(buildupScene);
                 }
-            }, { threshold: 0.6 }).observe(buildupScene);
+            }, { threshold: 0.6 });
+            buildupObserver.observe(buildupScene);
         }
-        
-        // ─── Auto-advance Letter → Question ─────────────
+
+        // ─── Auto-advance: Letter → Question ─────────
         const letterScene = $('sceneLetter');
         if (letterScene) {
-            new IntersectionObserver((entries) => {
+            const letterObserver = new IntersectionObserver(function(entries) {
                 if (entries[0].isIntersecting) {
-                    setTimeout(() => goTo(6), 6000);
+                    setTimeout(function() { showScene('sceneQuestion'); }, 6000);
+                    letterObserver.unobserve(letterScene);
                 }
-            }, { threshold: 0.4 }).observe(letterScene);
+            }, { threshold: 0.4 });
+            letterObserver.observe(letterScene);
         }
-        
-        // ─── Question Buttons ────────────────────────────
+
+        // ─── Question Buttons ────────────────────────
         const yesBtn = $('yesBtn');
         const maybeBtn = $('maybeBtn');
         const maybeMsg = $('maybeMessage');
-        
+
         if (yesBtn) {
-            yesBtn.addEventListener('click', () => {
+            yesBtn.addEventListener('click', function() {
+                console.log('🖱️ Yes button clicked');
                 yesBtn.textContent = '...';
                 if (maybeBtn) maybeBtn.style.opacity = '0';
-                setTimeout(() => goTo(7), 900);
+                setTimeout(function() { showScene('sceneYes'); }, 900);
             });
         }
-        
+
         if (maybeBtn) {
-            maybeBtn.addEventListener('click', () => {
-                goTo(8);
+            maybeBtn.addEventListener('click', function() {
+                console.log('🖱️ Maybe button clicked');
+                showScene('sceneMaybe');
                 if (maybeMsg && s.maybe?.message) {
                     maybeMsg.textContent = s.maybe.message;
                 }
             });
         }
-        
-        // ─── Maybe → Return option ──────────────────────
+
+        // ─── Return from Maybe ───────────────────────
         const returnBtn = $('returnBtn');
         if (returnBtn) {
-            returnBtn.addEventListener('click', () => goTo(6));
+            returnBtn.addEventListener('click', function() {
+                showScene('sceneQuestion');
+            });
         }
-        
-        // ─── Celebration ─────────────────────────────────
+
+        // ─── Celebration ─────────────────────────────
         function celebrate() {
             const canvas = $('celebrationCanvas');
             if (!canvas) return;
-            
+
             const colors = ['#f4a261', '#e76f51', '#e9c46a', '#2a9d8f', '#f5ebe0'];
             const fragment = document.createDocumentFragment();
-            
+
             for (let i = 0; i < 50; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                particle.style.cssText = `
-                    left: ${Math.random() * 100}%;
-                    top: ${Math.random() * 100}%;
-                    width: ${Math.random() * 4 + 2}px;
-                    height: ${Math.random() * 4 + 2}px;
-                    background: ${colors[Math.floor(Math.random() * colors.length)]};
-                    animation-delay: ${Math.random() * 2}s;
-                    animation-duration: ${Math.random() * 3 + 3}s;
-                `;
+                particle.style.cssText = 
+                    'left: ' + (Math.random() * 100) + '%;' +
+                    'top: ' + (Math.random() * 100) + '%;' +
+                    'width: ' + (Math.random() * 4 + 2) + 'px;' +
+                    'height: ' + (Math.random() * 4 + 2) + 'px;' +
+                    'background: ' + colors[Math.floor(Math.random() * colors.length)] + ';' +
+                    'animation-delay: ' + (Math.random() * 2) + 's;' +
+                    'animation-duration: ' + (Math.random() * 3 + 3) + 's;';
                 fragment.appendChild(particle);
             }
-            
+
             canvas.appendChild(fragment);
-            
+
             // Optional music
             if (s.music?.enabled && s.music?.file) {
-                const audio = new Audio(s.music.file);
-                audio.volume = s.music.volume || 0.3;
-                audio.play().catch(() => {});
+                try {
+                    const audio = new Audio(s.music.file);
+                    audio.volume = s.music.volume || 0.3;
+                    audio.play().catch(function() {});
+                } catch(e) {
+                    console.warn('Could not play music:', e);
+                }
             }
         }
-        
-        // ─── Secret Easter Egg ───────────────────────────
+
+        // ─── Secret Easter Egg ───────────────────────
         const secretTrigger = $('secretTrigger');
         if (secretTrigger && s.secret) {
-            secretTrigger.addEventListener('click', () => {
+            secretTrigger.addEventListener('click', function() {
                 const toast = document.createElement('div');
                 toast.className = 'secret-toast';
-                toast.innerHTML = `
-                    <p>✨ You found it.</p>
-                    <p>${s.secret}</p>
-                `;
+                toast.innerHTML = '<p>✨ You found it.</p><p>' + s.secret + '</p>';
                 document.body.appendChild(toast);
-                setTimeout(() => toast.remove(), 4000);
+                setTimeout(function() { toast.remove(); }, 4000);
             });
         }
-        
-        // ─── Respect Reduced Motion ──────────────────────
+
+        // ─── Reduced Motion ──────────────────────────
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             document.documentElement.classList.add('reduce-motion');
         }
-        
-        // ─── Start ───────────────────────────────────────
-        goTo(0);
-        console.log('💫 Just For You — Ready');
-    });
+
+        // ─── START! ──────────────────────────────────
+        showScene('sceneOpening');
+        console.log('💫 Just For You — Ready! Click "See what\'s inside" to begin.');
+    }
+
+    // ─── Run when DOM is ready ──────────────────────
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();
