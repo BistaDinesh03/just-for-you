@@ -1,0 +1,5 @@
+.DS_Store
+node_modules
+*.mp3
+*.mp4
+!assets/music/README.md
