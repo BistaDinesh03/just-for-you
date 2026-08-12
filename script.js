@@ -5,14 +5,14 @@
     function init() {
         const s = window.story;
         if (!s) {
-            console.error('❌ config.js missing.');
+            console.error('config.js missing.');
             return;
         }
-        console.log('✅ Story loaded for:', s.person?.name);
+        console.log('Story loaded for:', s.person?.name);
 
         const $ = function(id) {
             const el = document.getElementById(id);
-            if (!el) console.warn('⚠️ Missing: #' + id);
+            if (!el) console.warn('Missing: #' + id);
             return el;
         };
 
@@ -29,21 +29,18 @@
         const enterBtn = $('enterBtn');
         if (enterBtn && s.opening?.buttonText) enterBtn.textContent = s.opening.buttonText;
 
-        // How it started
         setText('howTitle', s.howItStarted?.title);
         setText('howDate', s.howItStarted?.date);
         setText('howLine1', s.howItStarted?.line1);
         setText('howLine2', s.howItStarted?.line2);
         setText('howLine3', s.howItStarted?.line3);
 
-        // Kept talking
         setText('keptTitle', s.keptTalking?.title);
         setText('keptLine1', s.keptTalking?.line1);
         setText('keptLine2', s.keptTalking?.line2);
         setText('keptLine3', s.keptTalking?.line3);
         setText('keptLine4', s.keptTalking?.line4);
 
-        // Honest part
         setText('honestTitle', s.honestPart?.title);
         const honestList = $('honestList');
         if (honestList && s.honestPart?.lines) {
@@ -51,46 +48,38 @@
             s.honestPart.lines.forEach(function(line, i) {
                 const li = document.createElement('li');
                 li.textContent = line;
-                li.style.animationDelay = (i * 0.5 + 0.3) + 's';
+                li.style.animationDelay = (i * 0.4 + 0.2) + 's';
                 honestList.appendChild(li);
             });
         }
 
-        // Confession
         setText('confLine1', s.confession?.line1);
         setText('confLine2', s.confession?.line2);
         setText('confLine3', s.confession?.line3);
         setText('confLine4', s.confession?.line4);
 
-        // Distance
         setText('distCountry1', s.distance?.line1);
         setText('distCountry2', s.distance?.line2);
         setText('distLine3', s.distance?.line3);
         setText('distLine4', s.distance?.line4);
         setText('distLine5', s.distance?.line5);
 
-        // Letter
         setText('letterBody', s.letter);
-
-        // Question
         setText('questionText', s.question);
 
-        // Yes
         setText('yesLine1', s.yes?.line1);
         setText('yesLine2', s.yes?.line2);
         setText('yesLine3', s.yes?.line3);
         setText('yesLine4', s.yes?.line4);
         setText('yesLine5', s.yes?.line5);
 
-        // Maybe
         setText('maybeLine1', s.maybe?.line1);
         setText('maybeLine2', s.maybe?.line2);
         setText('maybeLine3', s.maybe?.line3);
         setText('maybeLine4', s.maybe?.line4);
-        setText('maybeBtnText', s.maybe?.buttonText);
 
-        // ─── SCENE MANAGEMENT ────────────────────────
-        const sceneIds = [
+        // ─── SCENE ORDER ─────────────────────────────
+        const sceneOrder = [
             'sceneOpening',
             'sceneHowStarted',
             'sceneKeptTalking',
@@ -103,61 +92,77 @@
             'sceneMaybe'
         ];
 
-        function showScene(sceneId) {
-            sceneIds.forEach(function(id) {
+        let currentIndex = 0;
+
+        function showSceneByIndex(index) {
+            if (index < 0 || index >= sceneOrder.length) return;
+
+            // Hide all
+            sceneOrder.forEach(function(id) {
                 const el = $(id);
-                if (el) {
-                    el.classList.remove('active');
-                }
+                if (el) el.classList.remove('active');
             });
 
+            // Show target
+            const sceneId = sceneOrder[index];
             const target = $(sceneId);
-            if (!target) {
-                console.error('❌ Scene not found:', sceneId);
-                return;
-            }
+            if (!target) return;
 
             target.offsetHeight;
             target.classList.add('active');
+            currentIndex = index;
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            console.log('📍 Scene:', sceneId);
+            // Update back button visibility
+            updateNavButtons();
 
             if (sceneId === 'sceneYes') celebrate();
+
+            console.log('Scene ' + (index + 1) + '/' + sceneOrder.length + ': ' + sceneId);
+        }
+
+        function goNext() {
+            if (currentIndex < sceneOrder.length - 1) {
+                showSceneByIndex(currentIndex + 1);
+            }
+        }
+
+        function goBack() {
+            if (currentIndex > 0) {
+                showSceneByIndex(currentIndex - 1);
+            }
+        }
+
+        // ─── NAVIGATION BUTTONS ──────────────────────
+        const nextBtn = $('nextBtn');
+        const backBtn = $('backBtn');
+
+        function updateNavButtons() {
+            // Hide back button on first scene
+            if (backBtn) {
+                backBtn.style.display = (currentIndex === 0) ? 'none' : 'flex';
+            }
+            // Hide next button on last scenes (yes/maybe are endpoints)
+            if (nextBtn) {
+                var isEndScene = (sceneOrder[currentIndex] === 'sceneYes' || sceneOrder[currentIndex] === 'sceneMaybe');
+                nextBtn.style.display = isEndScene ? 'none' : 'flex';
+            }
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', goNext);
+        }
+
+        if (backBtn) {
+            backBtn.addEventListener('click', goBack);
         }
 
         // ─── ENTRY BUTTON ────────────────────────────
         if (enterBtn) {
             enterBtn.addEventListener('click', function() {
-                console.log('🖱️ Enter clicked');
-                this.textContent = '...';
-                this.disabled = true;
-                setTimeout(function() { showScene('sceneHowStarted'); }, 400);
-                setTimeout(function() { showScene('sceneKeptTalking'); }, 4500);
+                showSceneByIndex(1); // Go to first story scene
             });
-            console.log('✅ Enter button ready');
         }
-
-        // ─── AUTO-ADVANCE CHAIN ──────────────────────
-        function autoAdvance(triggerSceneId, nextSceneId, delay) {
-            const triggerEl = $(triggerSceneId);
-            if (!triggerEl) return;
-            let fired = false;
-            const observer = new IntersectionObserver(function(entries) {
-                if (entries[0].isIntersecting && !fired) {
-                    fired = true;
-                    setTimeout(function() { showScene(nextSceneId); }, delay);
-                    observer.unobserve(triggerEl);
-                }
-            }, { threshold: 0.5 });
-            observer.observe(triggerEl);
-        }
-
-        autoAdvance('sceneKeptTalking', 'sceneHonest', 5000);
-        autoAdvance('sceneHonest', 'sceneConfession', 8000);
-        autoAdvance('sceneConfession', 'sceneDistance', 5000);
-        autoAdvance('sceneDistance', 'sceneLetter', 5000);
-        autoAdvance('sceneLetter', 'sceneQuestion', 7000);
 
         // ─── QUESTION BUTTONS ────────────────────────
         const yesBtn = $('yesBtn');
@@ -165,17 +170,15 @@
 
         if (yesBtn) {
             yesBtn.addEventListener('click', function() {
-                console.log('🖱️ Yes clicked');
                 yesBtn.textContent = '...';
                 if (maybeBtn) maybeBtn.style.opacity = '0';
-                setTimeout(function() { showScene('sceneYes'); }, 900);
+                setTimeout(function() { showSceneByIndex(8); }, 600); // sceneYes
             });
         }
 
         if (maybeBtn) {
             maybeBtn.addEventListener('click', function() {
-                console.log('🖱️ Maybe clicked');
-                showScene('sceneMaybe');
+                showSceneByIndex(9); // sceneMaybe
             });
         }
 
@@ -183,11 +186,22 @@
         const returnBtn = $('returnBtn');
         if (returnBtn) {
             returnBtn.addEventListener('click', function() {
-                showScene('sceneQuestion');
-                if (yesBtn) yesBtn.textContent = 'Yes ❤️';
+                showSceneByIndex(7); // Back to question
+                if (yesBtn) yesBtn.textContent = 'Yes';
                 if (maybeBtn) maybeBtn.style.opacity = '1';
             });
         }
+
+        // ─── KEYBOARD NAVIGATION ─────────────────────
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                goNext();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                goBack();
+            }
+        });
 
         // ─── CELEBRATION ─────────────────────────────
         function celebrate() {
@@ -212,14 +226,6 @@
             }
 
             canvas.appendChild(fragment);
-
-            if (s.music?.enabled && s.music?.file) {
-                try {
-                    const audio = new Audio(s.music.file);
-                    audio.volume = s.music.volume || 0.3;
-                    audio.play().catch(function() {});
-                } catch(e) {}
-            }
         }
 
         // ─── SECRET ──────────────────────────────────
@@ -228,20 +234,11 @@
             secretTrigger.addEventListener('click', function() {
                 const toast = document.createElement('div');
                 toast.className = 'secret-toast';
-                toast.innerHTML = '<p style="margin-bottom:0.5rem;">✨ You found the secret.</p><p>' + s.secret + '</p>';
+                toast.innerHTML = '<p style="margin-bottom:0.4rem;">You found it.</p><p>' + s.secret + '</p>';
                 document.body.appendChild(toast);
-                setTimeout(function() { toast.remove(); }, 4500);
+                setTimeout(function() { toast.remove(); }, 4000);
             });
         }
-
-        // ─── LIGHTBOX ────────────────────────────────
-        window.closeLightbox = function() {
-            const lb = $('lightbox');
-            if (lb) {
-                lb.style.opacity = '0';
-                lb.style.pointerEvents = 'none';
-            }
-        };
 
         // ─── REDUCED MOTION ──────────────────────────
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -249,8 +246,8 @@
         }
 
         // ─── START ───────────────────────────────────
-        showScene('sceneOpening');
-        console.log('💫 Ready — Bisuta → Duyen');
+        showSceneByIndex(0);
+        console.log('Ready. Use buttons or arrow keys to navigate.');
     }
 
     if (document.readyState === 'loading') {

@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="A tiny interactive experience for someone special.">
     <title>Just For You</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
+        /* CLEAN, READABLE FONTS */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Libre+Baskerville:ital@0;1&display=swap');
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -15,21 +17,25 @@
             --text: #e8e4df;
             --text-muted: #9c958b;
             --accent: #d4a574;
-            --font-serif: 'EB Garamond', 'Times New Roman', serif;
-            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-heading: 'Inter', -apple-system, sans-serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --font-accent: 'Libre Baskerville', 'Georgia', serif;
         }
         
         body {
-            font-family: var(--font-sans);
+            font-family: var(--font-body);
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
             min-height: 100dvh;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            font-weight: 300;
         }
         
-        .serif { font-family: var(--font-serif); }
+        /* SIMPLE FONT CLASSES */
+        .font-heading { font-family: var(--font-heading); font-weight: 400; }
+        .font-accent { font-family: var(--font-accent); }
         
         /* SCENE SYSTEM */
         .scene {
@@ -40,9 +46,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1.5rem;
+            padding: 2rem 1.5rem 5rem;
             opacity: 0;
-            transition: opacity 0.7s ease;
+            transition: opacity 0.5s ease;
             overflow-y: auto;
             z-index: 1;
         }
@@ -54,14 +60,12 @@
         }
         
         /* TYPOGRAPHY */
-        .text-hero { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; text-align: center; }
-        .text-heading { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; line-height: 1.2; text-align: center; }
-        .text-subheading { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 400; line-height: 1.3; text-align: center; }
-        .text-body { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--text-muted); max-width: 500px; text-align: center; line-height: 1.7; }
-        .text-small { font-size: 0.9rem; color: var(--text-muted); text-align: center; }
-        .text-question { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 500; line-height: 1.2; text-align: center; }
-        
-        /* ACCENT TEXT */
+        .text-hero { font-size: clamp(2.2rem, 5vw, 4.5rem); line-height: 1.15; letter-spacing: -0.02em; text-align: center; }
+        .text-heading { font-size: clamp(1.6rem, 3.5vw, 2.5rem); line-height: 1.25; text-align: center; }
+        .text-subheading { font-size: clamp(1.2rem, 2.5vw, 1.6rem); line-height: 1.35; text-align: center; }
+        .text-body { font-size: clamp(0.95rem, 1.8vw, 1.1rem); color: var(--text-muted); max-width: 500px; text-align: center; line-height: 1.7; }
+        .text-small { font-size: 0.8rem; color: var(--text-muted); text-align: center; text-transform: uppercase; letter-spacing: 0.15em; }
+        .text-question { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 500; line-height: 1.25; text-align: center; }
         .text-accent { color: var(--accent); }
         
         /* SPACING */
@@ -76,40 +80,59 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.9rem 2.4rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.12);
+            padding: 0.85rem 2.2rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.14);
             color: var(--text);
             border-radius: 100px;
-            font-size: 1rem;
-            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-family: var(--font-body);
+            font-weight: 400;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             min-height: 48px;
-            min-width: 48px;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
+            text-decoration: none;
         }
-        .btn-primary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+        .btn-primary:hover { background: rgba(255,255,255,0.12); }
         .btn-primary:active { transform: scale(0.97); }
-        .btn-primary:disabled { opacity: 0.4; pointer-events: none; }
+        .btn-primary:disabled { opacity: 0.35; pointer-events: none; }
         
         .btn-ghost {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.7rem 1.8rem;
+            padding: 0.65rem 1.6rem;
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.08);
             color: var(--text-muted);
             border-radius: 100px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            min-height: 48px;
+            transition: all 0.25s ease;
+            min-height: 44px;
             user-select: none;
         }
-        .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
+        .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+        
+        /* NAVIGATION BAR */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .nav-bar button {
+            pointer-events: auto;
+        }
+        .nav-spacer { width: 48px; }
         
         /* DISTANCE CONNECTOR */
         .distance-connector {
@@ -120,15 +143,15 @@
             margin: 1.5rem 0;
         }
         .distance-dot {
-            width: 4px; height: 4px;
+            width: 3px; height: 3px;
             background: var(--text-muted);
             border-radius: 50%;
-            opacity: 0.5;
+            opacity: 0.4;
         }
         .distance-line {
-            width: 1px; height: 40px;
+            width: 1px; height: 36px;
             background: linear-gradient(to bottom, var(--text-muted), transparent);
-            opacity: 0.3;
+            opacity: 0.25;
         }
         
         /* HONEST LIST */
@@ -138,22 +161,22 @@
             text-align: center;
         }
         .honest-list li {
-            font-family: var(--font-serif);
+            font-family: var(--font-accent);
             font-style: italic;
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            font-size: clamp(1rem, 2.2vw, 1.2rem);
             color: var(--text-muted);
-            padding: 0.5rem 0;
+            padding: 0.4rem 0;
             opacity: 0;
-            transform: translateY(10px);
-            animation: fadeInLine 0.8s ease forwards;
+            transform: translateY(8px);
+            animation: fadeInLine 0.7s ease forwards;
         }
-        .honest-list li:nth-child(1) { animation-delay: 0.3s; }
-        .honest-list li:nth-child(2) { animation-delay: 0.8s; }
-        .honest-list li:nth-child(3) { animation-delay: 1.3s; }
-        .honest-list li:nth-child(4) { animation-delay: 1.8s; }
-        .honest-list li:nth-child(5) { animation-delay: 2.5s; }
-        .honest-list li:nth-child(6) { animation-delay: 3.2s; }
-        .honest-list li:nth-child(7) { animation-delay: 3.9s; }
+        .honest-list li:nth-child(1) { animation-delay: 0.2s; }
+        .honest-list li:nth-child(2) { animation-delay: 0.5s; }
+        .honest-list li:nth-child(3) { animation-delay: 0.8s; }
+        .honest-list li:nth-child(4) { animation-delay: 1.1s; }
+        .honest-list li:nth-child(5) { animation-delay: 1.6s; }
+        .honest-list li:nth-child(6) { animation-delay: 2.1s; }
+        .honest-list li:nth-child(7) { animation-delay: 2.6s; }
         
         @keyframes fadeInLine {
             to { opacity: 1; transform: translateY(0); }
@@ -161,16 +184,16 @@
         
         /* LETTER */
         .letter-text {
-            font-family: var(--font-serif);
-            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-            line-height: 1.9;
-            font-style: italic;
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 2.2vw, 1.15rem);
+            line-height: 1.85;
             white-space: pre-line;
             max-width: 550px;
             text-align: left;
+            font-weight: 300;
         }
         
-        /* CELEBRATION PARTICLES */
+        /* CELEBRATION */
         .particle {
             position: absolute;
             border-radius: 50%;
@@ -178,29 +201,27 @@
             animation: floatUp 4s ease-out forwards;
         }
         @keyframes floatUp {
-            0% { opacity: 0.7; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-50vh) scale(0); }
+            0% { opacity: 0.5; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40vh) scale(0); }
         }
         
         /* SECRET TOAST */
         .secret-toast {
             position: fixed;
-            bottom: 2rem;
+            bottom: 5rem;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(20,20,22,0.95);
+            background: rgba(20,20,22,0.96);
             border: 1px solid rgba(255,255,255,0.06);
-            padding: 1.5rem 2rem;
-            border-radius: 16px;
+            padding: 1.2rem 1.8rem;
+            border-radius: 12px;
             text-align: center;
             z-index: 200;
-            font-family: var(--font-serif);
-            font-style: italic;
-            animation: fadeInUp 0.5s ease;
+            animation: fadeInUp 0.4s ease;
             max-width: 90vw;
         }
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            from { opacity: 0; transform: translateX(-50%) translateY(12px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         
@@ -215,45 +236,39 @@
         
         /* MOBILE */
         @media (max-width: 400px) {
-            .scene { padding: 1.5rem 1rem; }
-            .btn-primary { padding: 0.8rem 1.8rem; font-size: 0.95rem; }
-            .letter-text { font-size: 1rem; }
+            .scene { padding: 1.5rem 1rem 5rem; }
+            .btn-primary { padding: 0.75rem 1.5rem; font-size: 0.9rem; }
+            .nav-bar { padding: 0.75rem 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 0: OPENING                              -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- OPENING -->
     <section id="sceneOpening" class="scene active">
         <div style="max-width: 600px;">
-            <p class="text-hero serif gap-xs" id="openingLine1">Hey, Duyen.</p>
+            <p class="text-hero font-heading gap-xs" id="openingLine1">Hey, Duyen.</p>
             <p class="text-body gap-lg" id="openingLine2">I made something for you.</p>
             <p class="text-small gap-xl" id="openingLine3">Not because I had to. I just wanted to.</p>
-            <button id="enterBtn" class="btn-primary">See what's inside →</button>
+            <button id="enterBtn" class="btn-primary">See what's inside</button>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 1: HOW IT STARTED                        -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- HOW IT STARTED -->
     <section id="sceneHowStarted" class="scene">
         <div style="max-width: 550px; text-align: center;">
-            <p class="text-subheading serif gap-md" id="howTitle">A little unexpected...</p>
-            <p class="text-accent text-small gap-lg" id="howDate" style="text-transform: uppercase; letter-spacing: 0.15em;">March 2026</p>
+            <p class="text-subheading font-heading gap-md" id="howTitle">A little unexpected...</p>
+            <p class="text-small gap-lg" id="howDate">March 2026</p>
             <p class="text-body gap-sm" id="howLine1">Two people. Two countries. One random conversation on HelloTalk.</p>
             <p class="text-body gap-sm" id="howLine2">I was in Japan. You were in Vietnam.</p>
             <p class="text-body" id="howLine3" style="font-style: italic;">I didn't expect that conversation to stay in my head.</p>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 2: KEPT TALKING                          -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- KEPT TALKING -->
     <section id="sceneKeptTalking" class="scene">
         <div style="max-width: 500px; text-align: center;">
-            <p class="text-heading serif gap-lg" id="keptTitle">Then we kept talking.</p>
+            <p class="text-heading font-heading gap-lg" id="keptTitle">Then we kept talking.</p>
             <p class="text-body gap-sm" id="keptLine1">Not every day. Not always for hours.</p>
             <p class="text-body gap-sm" id="keptLine2">Life gets busy.</p>
             <p class="text-body gap-sm" id="keptLine3">I'm studying in Japan. You're living your life in Vietnam.</p>
@@ -261,12 +276,10 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 3: THE HONEST PART                       -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- HONEST PART -->
     <section id="sceneHonest" class="scene">
         <div style="max-width: 550px; text-align: center;">
-            <p class="text-heading serif gap-lg" id="honestTitle">And that's the funny part.</p>
+            <p class="text-heading font-heading gap-lg" id="honestTitle">And that's the funny part.</p>
             <ul class="honest-list" id="honestList">
                 <li>We've never even met in person.</li>
                 <li>I don't have a hundred photos of us.</li>
@@ -279,24 +292,20 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 4: SMALL CONFESSION                      -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- CONFESSION -->
     <section id="sceneConfession" class="scene">
         <div style="max-width: 500px; text-align: center;">
             <p class="text-body gap-sm" id="confLine1">Sometimes I open HelloTalk...</p>
             <p class="text-body gap-sm" id="confLine2" style="font-style: italic;">...and secretly hope I'll see your message.</p>
             <p class="text-body gap-lg" id="confLine3">Maybe that's when I realized...</p>
-            <p class="text-subheading serif" id="confLine4">I like talking to you more than I probably should.</p>
+            <p class="text-subheading font-heading" id="confLine4">I like talking to you more than I probably should.</p>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 5: DISTANCE                              -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- DISTANCE -->
     <section id="sceneDistance" class="scene">
         <div style="max-width: 400px; text-align: center;">
-            <p class="text-subheading serif" id="distCountry1" style="font-weight: 500;">Japan</p>
+            <p class="text-subheading font-heading" id="distCountry1">Japan</p>
             <div class="distance-connector">
                 <div class="distance-dot"></div>
                 <div class="distance-line"></div>
@@ -304,81 +313,66 @@
                 <div class="distance-line"></div>
                 <div class="distance-dot"></div>
             </div>
-            <p class="text-subheading serif gap-lg" id="distCountry2" style="font-weight: 500;">Vietnam</p>
+            <p class="text-subheading font-heading gap-lg" id="distCountry2">Vietnam</p>
             <p class="text-body gap-sm" id="distLine3">Two countries. Busy lives. A surprisingly nice conversation.</p>
             <p class="text-body gap-sm" id="distLine4">I don't know where this goes.</p>
             <p class="text-body" id="distLine5" style="font-style: italic;">Maybe that's what makes it exciting.</p>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 6: LETTER                                -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- LETTER -->
     <section id="sceneLetter" class="scene">
         <div style="max-width: 550px;">
             <p class="letter-text" id="letterBody"></p>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 7: THE QUESTION                          -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- QUESTION -->
     <section id="sceneQuestion" class="scene">
         <div style="max-width: 500px; text-align: center;">
             <p class="text-body gap-sm" style="font-style: italic;">So, Duyen...</p>
             <p class="text-body gap-lg">I have one little question.</p>
-            <p class="text-question serif gap-xl" id="questionText">Would you like to be more than just someone I talk to?</p>
+            <p class="text-question font-heading gap-xl" id="questionText">Would you like to be more than just someone I talk to?</p>
             <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-                <button id="yesBtn" class="btn-primary" style="width: 100%; max-width: 300px;">Yes ❤️</button>
+                <button id="yesBtn" class="btn-primary" style="width: 100%; max-width: 300px;">Yes</button>
                 <button id="maybeBtn" class="btn-ghost" style="width: 100%; max-width: 300px;">I'd like to know you more first</button>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 8: YES!                                  -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- YES -->
     <section id="sceneYes" class="scene">
         <div style="max-width: 500px; text-align: center; position: relative; z-index: 2;">
-            <p class="text-subheading serif gap-sm" id="yesLine1">Then...</p>
-            <p class="text-heading serif gap-sm" id="yesLine2">I guess this little story has officially become our story.</p>
+            <p class="text-subheading font-heading gap-sm" id="yesLine1">Then...</p>
+            <p class="text-heading font-heading gap-sm" id="yesLine2">I guess this little story has officially become our story.</p>
             <p class="text-body gap-sm" id="yesLine3">I'm really happy, Duyen.</p>
             <p class="text-body gap-sm" id="yesLine4">Let's see where this takes us.</p>
-            <p class="text-small gap-sm" id="yesLine5" style="font-style: italic;">— Bisuta</p>
+            <p class="text-small" id="yesLine5">— Bisuta</p>
         </div>
         <div id="celebrationCanvas" style="position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none;"></div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCENE 9: MAYBE                                 -->
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- MAYBE -->
     <section id="sceneMaybe" class="scene">
         <div style="max-width: 450px; text-align: center;">
-            <p class="text-heading serif gap-sm" id="maybeLine1">That's completely okay.</p>
+            <p class="text-heading font-heading gap-sm" id="maybeLine1">That's completely okay.</p>
             <p class="text-body gap-sm" id="maybeLine2">We can take our time.</p>
             <p class="text-body gap-sm" id="maybeLine3">No pressure.</p>
             <p class="text-body gap-lg" id="maybeLine4">I just wanted you to know how I feel.</p>
-            <button id="returnBtn" class="btn-ghost" id="maybeBtnText">Keep going →</button>
+            <button id="returnBtn" class="btn-ghost">Go back</button>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- LIGHTBOX (hidden, kept for structure)          -->
-    <!-- ═══════════════════════════════════════════════ -->
-    <div id="lightbox" class="lightbox-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s;">
-        <button class="lightbox-close" onclick="closeLightbox()" style="position:absolute;top:1.5rem;right:1.5rem;width:44px;height:44px;font-size:1.5rem;color:white;cursor:pointer;border-radius:50%;background:rgba(255,255,255,0.05);border:none;">✕</button>
-        <img id="lightboxImg" src="" alt="" style="max-width:90vw;max-height:75vh;border-radius:4px;">
-        <p id="lightboxCaption" style="margin-top:1rem;color:#9c958b;font-style:italic;font-family:'EB Garamond',serif;"></p>
+    <!-- NAVIGATION BAR -->
+    <div class="nav-bar">
+        <button id="backBtn" class="btn-ghost" style="display: none;">Back</button>
+        <div class="nav-spacer"></div>
+        <button id="nextBtn" class="btn-primary">Next</button>
     </div>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SECRET TRIGGER                                 -->
-    <!-- ═══════════════════════════════════════════════ -->
-    <button id="secretTrigger" style="position:fixed;bottom:1.5rem;right:1.5rem;width:36px;height:36px;border-radius:50%;background:transparent;border:none;cursor:pointer;opacity:0.2;z-index:50;font-size:1.1rem;transition:opacity 0.4s;" aria-label="Secret">✨</button>
+    <!-- SECRET -->
+    <button id="secretTrigger" style="position:fixed;top:1.5rem;right:1.5rem;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid rgba(255,255,255,0.08);cursor:pointer;opacity:0.25;z-index:50;font-size:0.8rem;color:var(--text-muted);transition:opacity 0.4s;" aria-label="Secret">+</button>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- SCRIPTS (order matters!)                       -->
-    <!-- ═══════════════════════════════════════════════ -->
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
