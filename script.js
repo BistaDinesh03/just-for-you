@@ -1,83 +1,107 @@
-document.addEventListener('DOMContentLoaded', () => {
+// Wait for everything to load
+window.addEventListener('DOMContentLoaded', () => {
+    
+    // Get config safely
     const config = window.proposal;
     
-    // Populate all text from config
-    document.getElementById('entryName').textContent = config.intro.title;
-    document.querySelector('#sceneEntry p').textContent = config.intro.subtitle;
-    document.getElementById('personalLine1').textContent = config.personalMessage.line1;
-    document.getElementById('personalLine2').textContent = config.personalMessage.line2;
-    document.getElementById('proposalQuestion').textContent = config.question;
-    document.getElementById('yesMessageDisplay').textContent = config.yesMessage;
-    document.getElementById('letterContent').textContent = config.letter;
+    // Check if config exists
+    if (!config) {
+        console.error('❌ config.js not loaded! Make sure config.js is in the same folder.');
+        return;
+    }
     
-    // Playful section text
-    const playfulQuestion = document.querySelector('#scenePlayful .serif');
-    if (playfulQuestion) playfulQuestion.textContent = config.playful.question;
+    console.log('✅ Config loaded:', config.name);
     
-    const playfulSubtitle = document.querySelector('#scenePlayful p:nth-of-type(2)');
-    if (playfulSubtitle) playfulSubtitle.textContent = config.playful.subtitle;
+    // Safe element getter
+    function getEl(id) {
+        const el = document.getElementById(id);
+        if (!el) console.warn(`⚠️ Element #${id} not found`);
+        return el;
+    }
     
-    document.getElementById('optionFood').textContent = config.playful.option1;
-    document.getElementById('optionYou').textContent = config.playful.option2;
+    // Populate text safely
+    const entryName = getEl('entryName');
+    if (entryName && config.intro) entryName.textContent = config.intro.title;
     
-    // Scene IDs in order
+    const entrySubtitle = document.querySelector('#sceneEntry p');
+    if (entrySubtitle && config.intro) entrySubtitle.textContent = config.intro.subtitle;
+    
+    const personal1 = getEl('personalLine1');
+    if (personal1 && config.personalMessage) personal1.textContent = config.personalMessage.line1;
+    
+    const personal2 = getEl('personalLine2');
+    if (personal2 && config.personalMessage) personal2.textContent = config.personalMessage.line2;
+    
+    const proposalQ = getEl('proposalQuestion');
+    if (proposalQ && config.question) proposalQ.textContent = config.question;
+    
+    const yesMsg = getEl('yesMessageDisplay');
+    if (yesMsg && config.yesMessage) yesMsg.textContent = config.yesMessage;
+    
+    const letterContent = getEl('letterContent');
+    if (letterContent && config.letter) letterContent.textContent = config.letter;
+    
+    // Playful section
+    if (config.playful) {
+        const playfulQ = document.querySelector('#scenePlayful .serif');
+        if (playfulQ) playfulQ.textContent = config.playful.question;
+        
+        const playfulSub = document.querySelector('#scenePlayful p:nth-of-type(2)');
+        if (playfulSub) playfulSub.textContent = config.playful.subtitle;
+        
+        const opt1 = getEl('optionFood');
+        if (opt1) opt1.textContent = config.playful.option1;
+        
+        const opt2 = getEl('optionYou');
+        if (opt2) opt2.textContent = config.playful.option2;
+    }
+    
+    // Scene management
     const scenes = [
-        'sceneEntry',
-        'scenePersonal', 
-        'sceneMemories',
-        'scenePhotos',
-        'scenePlayful',
-        'sceneBuildup',
-        'sceneLetter',
-        'sceneProposal',
-        'sceneCelebration'
+        'sceneEntry', 'scenePersonal', 'sceneMemories', 'scenePhotos',
+        'scenePlayful', 'sceneBuildup', 'sceneLetter', 'sceneProposal', 'sceneCelebration'
     ];
-    
-    let currentScene = 0;
     
     function showScene(index) {
         if (index < 0 || index >= scenes.length) return;
         
-        // Hide all scenes
         scenes.forEach(id => {
-            const el = document.getElementById(id);
+            const el = getEl(id);
             if (el) {
                 el.classList.add('hidden-scene');
                 el.classList.remove('active-scene');
             }
         });
         
-        // Show target scene
-        const target = document.getElementById(scenes[index]);
+        const target = getEl(scenes[index]);
         if (target) {
             target.classList.remove('hidden-scene');
             target.classList.add('active-scene');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            currentScene = index;
             
-            // Start celebration if it's the last scene
             if (scenes[index] === 'sceneCelebration') {
                 startCelebration();
             }
         }
     }
     
-    // ENTER BUTTON - Start the journey
-    document.getElementById('enterButton').addEventListener('click', function() {
-        this.textContent = '...';
-        this.disabled = true;
-        
-        setTimeout(() => {
-            showScene(1); // Show personal message
+    // ENTER BUTTON
+    const enterBtn = getEl('enterButton');
+    if (enterBtn) {
+        enterBtn.addEventListener('click', function() {
+            this.textContent = '...';
+            this.disabled = true;
+            
             setTimeout(() => {
-                showScene(2); // Show memories after 3 seconds
-            }, 3000);
-        }, 600);
-    });
+                showScene(1);
+                setTimeout(() => showScene(2), 3000);
+            }, 600);
+        });
+    }
     
     // Build memories
-    const container = document.getElementById('memoriesContainer');
-    if (container && config.memories) {
+    const memoriesContainer = getEl('memoriesContainer');
+    if (memoriesContainer && config.memories) {
         config.memories.forEach((memory, i) => {
             const div = document.createElement('div');
             div.className = 'flex flex-col md:flex-row gap-8 items-center opacity-0 translate-y-8 transition-all duration-1000';
@@ -90,14 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="flex-1 order-1 md:order-2 overflow-hidden rounded-2xl">
                     <img src="${memory.image}" alt="${memory.title}" 
-                         class="w-full h-64 md:h-80 object-cover rounded-2xl hover:scale-105 transition-transform duration-700" 
-                         loading="lazy" 
-                         onerror="this.src='assets/images/placeholder-1.jpg'">
+                         class="w-full h-64 md:h-80 object-cover rounded-2xl" 
+                         loading="lazy">
                 </div>
             `;
-            container.appendChild(div);
+            memoriesContainer.appendChild(div);
             
-            // Reveal on scroll
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -111,96 +133,101 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Build photo gallery
-    const grid = document.getElementById('photoGrid');
-    if (grid && config.memories) {
+    // Build photos
+    const photoGrid = getEl('photoGrid');
+    if (photoGrid && config.memories) {
         config.memories.forEach((memory) => {
             const div = document.createElement('div');
             div.className = 'overflow-hidden rounded-2xl cursor-pointer group relative';
             div.innerHTML = `
                 <img src="${memory.image}" alt="${memory.title}" 
                      class="w-full h-72 md:h-96 object-cover transition-all duration-700 group-hover:scale-105" 
-                     loading="lazy" 
-                     onerror="this.src='assets/images/placeholder-1.jpg'">
+                     loading="lazy">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 flex items-end p-6">
                     <p class="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 serif text-xl">${memory.title}</p>
                 </div>
             `;
             div.addEventListener('click', () => {
-                const lightbox = document.getElementById('lightbox');
-                const lightboxImg = document.getElementById('lightboxImg');
-                if (lightbox && lightboxImg) {
-                    lightboxImg.src = memory.image;
-                    lightbox.classList.add('active');
+                const lb = getEl('lightbox');
+                const lbImg = getEl('lightboxImg');
+                if (lb && lbImg) {
+                    lbImg.src = memory.image;
+                    lb.classList.add('active');
                     document.body.style.overflow = 'hidden';
                 }
             });
-            grid.appendChild(div);
+            photoGrid.appendChild(div);
         });
     }
     
-    // Lightbox close
+    // Close lightbox
     window.closeLightbox = function() {
-        const lightbox = document.getElementById('lightbox');
-        if (lightbox) {
-            lightbox.classList.remove('active');
+        const lb = getEl('lightbox');
+        if (lb) {
+            lb.classList.remove('active');
             document.body.style.overflow = '';
         }
     };
     
-    // Close lightbox with Escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'Escape') window.closeLightbox();
     });
     
-    // Playful interaction
-    const response = document.getElementById('playfulResponse');
-    document.getElementById('optionFood').addEventListener('click', () => {
-        response.textContent = config.playful.response1;
-        response.classList.remove('opacity-0');
-        response.classList.add('opacity-100');
-        setTimeout(() => showScene(5), 2000);
-    });
+    // Playful buttons
+    const playfulResponse = getEl('playfulResponse');
+    const foodBtn = getEl('optionFood');
+    const youBtn = getEl('optionYou');
     
-    document.getElementById('optionYou').addEventListener('click', () => {
-        response.textContent = config.playful.response2;
-        response.classList.remove('opacity-0');
-        response.classList.add('opacity-100');
-        setTimeout(() => showScene(5), 2000);
-    });
+    if (foodBtn && config.playful) {
+        foodBtn.addEventListener('click', () => {
+            if (playfulResponse) {
+                playfulResponse.textContent = config.playful.response1;
+                playfulResponse.classList.remove('opacity-0');
+                playfulResponse.classList.add('opacity-100');
+            }
+            setTimeout(() => showScene(5), 2000);
+        });
+    }
     
-    // Auto advance from buildup to letter
-    const buildupEl = document.getElementById('sceneBuildup');
-    if (buildupEl) {
-        const buildupObs = new IntersectionObserver((entries) => {
+    if (youBtn && config.playful) {
+        youBtn.addEventListener('click', () => {
+            if (playfulResponse) {
+                playfulResponse.textContent = config.playful.response2;
+                playfulResponse.classList.remove('opacity-0');
+                playfulResponse.classList.add('opacity-100');
+            }
+            setTimeout(() => showScene(5), 2000);
+        });
+    }
+    
+    // Auto advance buildup
+    const buildup = getEl('sceneBuildup');
+    if (buildup) {
+        new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     setTimeout(() => showScene(6), 4000);
-                    buildupObs.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
-        buildupObs.observe(buildupEl);
+        }, { threshold: 0.5 }).observe(buildup);
     }
     
-    // Auto advance from letter to proposal
-    const letterEl = document.getElementById('sceneLetter');
-    if (letterEl) {
-        const letterObs = new IntersectionObserver((entries) => {
+    // Auto advance letter
+    const letter = getEl('sceneLetter');
+    if (letter) {
+        new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     setTimeout(() => showScene(7), 5000);
-                    letterObs.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.3 });
-        letterObs.observe(letterEl);
+        }, { threshold: 0.3 }).observe(letter);
     }
     
     // Proposal buttons
-    const yesBtn = document.getElementById('yesButton');
-    const maybeBtn = document.getElementById('maybeButton');
-    const maybeMsg = document.getElementById('maybeMessageDisplay');
+    const yesBtn = getEl('yesButton');
+    const maybeBtn = getEl('maybeButton');
+    const maybeMsg = getEl('maybeMessageDisplay');
     
     if (yesBtn) {
         yesBtn.addEventListener('click', () => {
@@ -212,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (maybeBtn) {
         maybeBtn.addEventListener('click', () => {
-            if (maybeMsg) {
+            if (maybeMsg && config.maybeMessage) {
                 maybeMsg.textContent = config.maybeMessage;
                 maybeMsg.classList.remove('opacity-0');
                 maybeMsg.classList.add('opacity-100');
@@ -224,90 +251,72 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Celebration particles
+    // Celebration
     function startCelebration() {
-        const canvas = document.getElementById('celebrationCanvas');
+        const canvas = getEl('celebrationCanvas');
         if (!canvas) return;
         canvas.innerHTML = '';
         
         const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff8fab'];
         
-        // Colored particles
         for (let i = 0; i < 60; i++) {
             const p = document.createElement('div');
             p.style.cssText = `
-                position: absolute;
-                width: ${Math.random() * 8 + 2}px;
-                height: ${Math.random() * 8 + 2}px;
-                background: ${colors[Math.floor(Math.random() * colors.length)]};
-                border-radius: 50%;
-                left: ${Math.random() * 100}%;
-                top: ${Math.random() * 100}%;
-                opacity: 0;
-                pointer-events: none;
-                animation: floatUp ${Math.random() * 3 + 2}s ease-out infinite;
-                animation-delay: ${Math.random() * 2}s;
+                position:absolute;
+                width:${Math.random()*8+2}px;
+                height:${Math.random()*8+2}px;
+                background:${colors[Math.floor(Math.random()*colors.length)]};
+                border-radius:50%;
+                left:${Math.random()*100}%;
+                top:${Math.random()*100}%;
+                opacity:0;
+                pointer-events:none;
+                animation:floatUp ${Math.random()*3+2}s ease-out infinite;
+                animation-delay:${Math.random()*2}s;
             `;
             canvas.appendChild(p);
         }
         
-        // Floating hearts
         for (let i = 0; i < 15; i++) {
             const h = document.createElement('div');
             h.innerHTML = '❤️';
             h.style.cssText = `
-                position: absolute;
-                font-size: ${Math.random() * 20 + 12}px;
-                left: ${Math.random() * 100}%;
-                top: ${Math.random() * 100}%;
-                opacity: 0;
-                pointer-events: none;
-                animation: heartFloat ${Math.random() * 4 + 3}s ease-out infinite;
-                animation-delay: ${Math.random() * 3}s;
+                position:absolute;
+                font-size:${Math.random()*20+12}px;
+                left:${Math.random()*100}%;
+                top:${Math.random()*100}%;
+                opacity:0;
+                pointer-events:none;
+                animation:heartFloat ${Math.random()*4+3}s ease-out infinite;
+                animation-delay:${Math.random()*3}s;
             `;
             canvas.appendChild(h);
         }
     }
     
-    // Secret easter egg
-    const secretHeart = document.getElementById('secretHeart');
-    if (secretHeart) {
-        secretHeart.addEventListener('click', function() {
-            const secret = document.createElement('div');
-            secret.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: rgba(0,0,0,0.95);
-                backdrop-filter: blur(20px);
-                padding: 3rem;
-                border-radius: 2rem;
-                z-index: 2000;
-                text-align: center;
-                color: white;
-            `;
-            secret.innerHTML = `
+    // Secret
+    const secretBtn = getEl('secretHeart');
+    if (secretBtn) {
+        secretBtn.addEventListener('click', () => {
+            const div = document.createElement('div');
+            div.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.95);padding:3rem;border-radius:2rem;z-index:2000;text-align:center;color:white;';
+            div.innerHTML = `
                 <p class="text-2xl serif mb-4">You found the secret. ✨</p>
-                <p class="text-xl italic">${config.secretMessage}</p>
-                <button class="mt-6 px-6 py-2 bg-white/10 rounded-full hover:bg-white/20 transition" onclick="this.parentElement.remove()">close</button>
+                <p class="text-xl italic">${config.secretMessage || 'You are amazing.'}</p>
+                <button class="mt-6 px-6 py-2 bg-white/10 rounded-full" onclick="this.parentElement.remove()">close</button>
             `;
-            document.body.appendChild(secret);
-            setTimeout(() => {
-                if (secret.parentElement) secret.remove();
-            }, 5000);
+            document.body.appendChild(div);
+            setTimeout(() => { if (div.parentElement) div.remove(); }, 5000);
         });
     }
     
-    // Music toggle
-    const musicToggle = document.getElementById('musicToggle');
-    let audio = null;
-    if (config.music && config.music.enabled) {
+    // Music
+    const musicToggle = getEl('musicToggle');
+    if (config.music && config.music.enabled && musicToggle) {
         musicToggle.style.display = 'flex';
-        audio = new Audio(config.music.file);
+        const audio = new Audio(config.music.file);
         audio.loop = true;
         audio.volume = 0.3;
-        
         musicToggle.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play().catch(() => {});
@@ -319,34 +328,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Create background stars
-    const particles = document.getElementById('particlesContainer');
+    // Stars
+    const particles = getEl('particlesContainer');
     if (particles) {
         for (let i = 0; i < 30; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.cssText = `
-                left: ${Math.random() * 100}%;
-                top: ${Math.random() * 100}%;
-                width: ${Math.random() * 2 + 1}px;
-                height: ${Math.random() * 2 + 1}px;
-                animation-delay: ${Math.random() * 6}s;
-                animation-duration: ${Math.random() * 4 + 4}s;
+                left:${Math.random()*100}%;
+                top:${Math.random()*100}%;
+                width:${Math.random()*2+1}px;
+                height:${Math.random()*2+1}px;
+                animation-delay:${Math.random()*6}s;
+                animation-duration:${Math.random()*4+4}s;
             `;
             particles.appendChild(star);
         }
     }
     
-    // Start with first scene
+    // Start!
     showScene(0);
-    
-    // Respect reduced motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.querySelectorAll('.star, .memory-card, .photo-cinematic').forEach(el => {
-            el.style.animation = 'none';
-            el.style.transition = 'none';
-        });
-    }
-    
-    console.log('✅ Just For You - Ready! Click Enter to start.');
+    console.log('✅ Just For You is ready! Click Enter to start.');
 });
