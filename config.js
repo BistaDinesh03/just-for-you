@@ -1,83 +1,125 @@
-// ✦ JUST FOR YOU — Make it yours in 5 minutes ✦
+// ✦ JUST FOR YOU — Make it yours ✦
 // Change everything between the quotes and brackets below
 
 window.story = {
     // 👤 WHO IS THIS FOR?
     person: {
-        name: "Her Name",
+        name: "Duyen",
         pronoun: "her"
+    },
+
+    // 💁 WHO IS SENDING THIS?
+    creator: {
+        name: "Bisuta",
+        country: "Japan"
+    },
+
+    // 🌏 HOW WE CONNECTED
+    connection: {
+        platform: "HelloTalk",
+        month: "March 2026",
+        otherCountry: "Vietnam"
     },
 
     // 💭 FIRST IMPRESSION
     opening: {
-        line1: "Hey, Her Name.",
+        line1: "Hey, Duyen.",
         line2: "I made something for you.",
+        line3: "Not because I had to. I just wanted to.",
         buttonText: "See what's inside →"
     },
 
-    // 📸 YOUR MEMORIES
-    memories: [
-        {
-            date: "March 2026",
-            title: "The day we met",
-            description: "You walked in and suddenly the room felt different. I still remember exactly what you were wearing.",
-            image: "assets/images/placeholder-1.jpg"
-        },
-        {
-            date: "April 2026",
-            title: "Coffee & conversations",
-            description: "Three hours felt like three minutes. I knew then that talking to you was my new favorite thing.",
-            image: "assets/images/placeholder-2.jpg"
-        },
-        {
-            date: "May 2026",
-            title: "That sunset",
-            description: "We didn't say much. We didn't need to. That's when I realized.",
-            image: "assets/images/placeholder-3.jpg"
-        }
-    ],
+    // 📖 HOW IT STARTED
+    howItStarted: {
+        title: "A little unexpected...",
+        date: "March 2026",
+        line1: "Two people. Two countries. One random conversation on HelloTalk.",
+        line2: "I was in Japan. You were in Vietnam.",
+        line3: "I didn't expect that conversation to stay in my head."
+    },
 
-    // 🎮 PLAYFUL MOMENT
-    playful: {
-        enabled: true,
-        question: "Quick question...",
-        optionA: "Pizza 🍕",
-        optionB: "Talking to you",
-        responseA: "Wrong. But I respect your honesty.",
-        responseB: "Obviously. It's not even close."
+    // 💬 KEPT TALKING
+    keptTalking: {
+        title: "Then we kept talking.",
+        line1: "Not every day. Not always for hours.",
+        line2: "Life gets busy.",
+        line3: "I'm studying in Japan. You're living your life in Vietnam.",
+        line4: "But somehow, I still find myself thinking about you."
+    },
+
+    // 🎯 THE HONEST PART
+    honestPart: {
+        title: "And that's the funny part.",
+        lines: [
+            "We've never even met in person.",
+            "I don't have a hundred photos of us.",
+            "We don't have a favorite place together.",
+            "We don't have memories from some perfect date.",
+            "We just have conversations.",
+            "Little moments.",
+            "And somehow, they started meaning something to me."
+        ]
+    },
+
+    // 💕 SMALL CONFESSION
+    confession: {
+        line1: "Sometimes I open HelloTalk...",
+        line2: "...and secretly hope I'll see your message.",
+        line3: "Maybe that's when I realized...",
+        line4: "I like talking to you more than I probably should."
+    },
+
+    // 🌏 DISTANCE
+    distance: {
+        line1: "Japan",
+        line2: "Vietnam",
+        line3: "Two countries. Busy lives. A surprisingly nice conversation.",
+        line4: "I don't know where this goes.",
+        line5: "Maybe that's what makes it exciting."
     },
 
     // 💌 YOUR LETTER
-    letter: `I don't know exactly when it happened.
+    letter: `Duyen,
 
-Somewhere between the late-night conversations and the stupid jokes, between the random voice messages and the way you laugh at things that aren't even that funny — somewhere in there, you became really important to me.
+I don't want to pretend we've known each other forever.
 
-I started looking forward to my phone buzzing. I started saving things to tell you later. I started noticing small things about you that I couldn't stop thinking about.
+We haven't.
 
-What I'm trying to say is — you're not just someone I talk to. You're someone I care about. A lot. And I wanted you to know that in a way that felt a little more special than just a text message.
+We've never even met in person.
 
-So I built this. Just for you.`,
+But I genuinely enjoy talking to you.
 
-    // 💭 BUILDUP
-    buildup: {
-        line1: "So I've been thinking...",
-        line2: "About you. About us.",
-        line3: "And there's something I want to ask you."
-    },
+Even when I'm busy with studying, sometimes you still cross my mind.
+
+I don't know exactly what this becomes.
+
+I just know I'd like to find out.
+
+Slowly.
+Honestly.
+Together.
+
+— Bisuta`,
 
     // ❤️ THE QUESTION
-    question: "Will you be my girlfriend?",
+    question: "Would you like to be more than just someone I talk to?",
 
-    // 🎉 IF THEY SAY YES
+    // 🎉 IF SHE SAYS YES
     yes: {
-        line1: "Wait, really?",
-        line2: "You just made me so happy.",
-        line3: "I can't wait for what's next."
+        line1: "Then...",
+        line2: "I guess this little story has officially become our story.",
+        line3: "I'm really happy, Duyen.",
+        line4: "Let's see where this takes us.",
+        line5: "— Bisuta"
     },
 
-    // 💛 IF THEY NEED TIME
+    // 💛 IF SHE NEEDS TIME
     maybe: {
-        message: "That's completely okay. Take all the time you need. I'm not going anywhere."
+        line1: "That's completely okay.",
+        line2: "We can take our time.",
+        line3: "No pressure.",
+        line4: "I just wanted you to know how I feel.",
+        buttonText: "Keep going →"
     },
 
     // 🎵 MUSIC (optional)
@@ -88,5 +130,5 @@ So I built this. Just for you.`,
     },
 
     // 🤫 SECRET MESSAGE
-    secret: "Psst... you're really cute when you're curious."
+    secret: "Okay, one more thing... I really do like talking to you. — Bisuta"
 };

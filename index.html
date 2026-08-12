@@ -10,29 +10,39 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: #0a0a0b;
-            color: #e8e4df;
-            min-height: 100vh;
-            overflow-x: hidden;
+        :root {
+            --bg: #0a0a0b;
+            --text: #e8e4df;
+            --text-muted: #9c958b;
+            --accent: #d4a574;
+            --font-serif: 'EB Garamond', 'Times New Roman', serif;
+            --font-sans: 'Inter', -apple-system, sans-serif;
         }
         
-        .serif { font-family: 'EB Garamond', 'Times New Roman', serif; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .serif { font-family: var(--font-serif); }
         
         /* SCENE SYSTEM */
         .scene {
             position: fixed;
             top: 0; left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 2rem 1.5rem;
             opacity: 0;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.7s ease;
             overflow-y: auto;
             z-index: 1;
         }
@@ -44,10 +54,22 @@
         }
         
         /* TYPOGRAPHY */
-        .text-hero { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
-        .text-heading { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; line-height: 1.2; }
-        .text-body { font-size: clamp(1rem, 2vw, 1.15rem); color: #9c958b; max-width: 480px; }
-        .text-question { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.15; }
+        .text-hero { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; text-align: center; }
+        .text-heading { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 400; line-height: 1.2; text-align: center; }
+        .text-subheading { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 400; line-height: 1.3; text-align: center; }
+        .text-body { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--text-muted); max-width: 500px; text-align: center; line-height: 1.7; }
+        .text-small { font-size: 0.9rem; color: var(--text-muted); text-align: center; }
+        .text-question { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 500; line-height: 1.2; text-align: center; }
+        
+        /* ACCENT TEXT */
+        .text-accent { color: var(--accent); }
+        
+        /* SPACING */
+        .gap-xs { margin-bottom: 0.5rem; }
+        .gap-sm { margin-bottom: 1rem; }
+        .gap-md { margin-bottom: 1.5rem; }
+        .gap-lg { margin-bottom: 2rem; }
+        .gap-xl { margin-bottom: 3rem; }
         
         /* BUTTONS */
         .btn-primary {
@@ -55,18 +77,22 @@
             align-items: center;
             justify-content: center;
             padding: 0.9rem 2.4rem;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: #e8e4df;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text);
             border-radius: 100px;
             font-size: 1rem;
+            font-family: var(--font-sans);
             cursor: pointer;
             transition: all 0.3s ease;
             min-height: 48px;
+            min-width: 48px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
-        .btn-primary:hover { background: rgba(255,255,255,0.12); }
+        .btn-primary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
         .btn-primary:active { transform: scale(0.97); }
-        .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-primary:disabled { opacity: 0.4; pointer-events: none; }
         
         .btn-ghost {
             display: inline-flex;
@@ -74,86 +100,104 @@
             justify-content: center;
             padding: 0.7rem 1.8rem;
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #9c958b;
+            border: 1px solid rgba(255,255,255,0.07);
+            color: var(--text-muted);
             border-radius: 100px;
             font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.3s ease;
             min-height: 48px;
+            user-select: none;
         }
-        .btn-ghost:hover { color: #e8e4df; border-color: rgba(255,255,255,0.2); }
+        .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
         
-        /* MEMORY CARDS */
-        .memory-card {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            padding: 2rem 0;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-        .memory-card.visible { opacity: 1; transform: translateY(0); }
-        .memory-date { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: #d4a574; }
-        .memory-title { font-family: 'EB Garamond', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; }
-        .memory-text { color: #9c958b; line-height: 1.7; }
-        .memory-image-wrap { border-radius: 4px; overflow: hidden; cursor: pointer; aspect-ratio: 4/3; }
-        .memory-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
-        .memory-image-wrap:hover .memory-image { transform: scale(1.03); }
-        
-        @media (min-width: 640px) {
-            .memory-card { grid-template-columns: 1fr 1fr; align-items: center; gap: 2.5rem; }
-            .memory-card:nth-child(even) .memory-content { order: 2; }
-            .memory-card:nth-child(even) .memory-image-wrap { order: 1; }
-        }
-        
-        /* LIGHTBOX */
-        .lightbox-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.94);
-            z-index: 100;
+        /* DISTANCE CONNECTOR */
+        .distance-connector {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
+            gap: 0.3rem;
+            margin: 1.5rem 0;
         }
-        .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
-        .lightbox-overlay img { max-width: 90vw; max-height: 75vh; border-radius: 4px; }
-        .lightbox-caption { margin-top: 1rem; color: #9c958b; font-style: italic; }
-        .lightbox-close {
-            position: absolute; top: 1.5rem; right: 1.5rem;
-            width: 44px; height: 44px;
-            font-size: 1.5rem; color: white;
-            cursor: pointer; border-radius: 50%;
-            background: rgba(255,255,255,0.05); border: none;
+        .distance-dot {
+            width: 4px; height: 4px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+        .distance-line {
+            width: 1px; height: 40px;
+            background: linear-gradient(to bottom, var(--text-muted), transparent);
+            opacity: 0.3;
         }
         
-        /* PARTICLES */
+        /* HONEST LIST */
+        .honest-list {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        .honest-list li {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-muted);
+            padding: 0.5rem 0;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInLine 0.8s ease forwards;
+        }
+        .honest-list li:nth-child(1) { animation-delay: 0.3s; }
+        .honest-list li:nth-child(2) { animation-delay: 0.8s; }
+        .honest-list li:nth-child(3) { animation-delay: 1.3s; }
+        .honest-list li:nth-child(4) { animation-delay: 1.8s; }
+        .honest-list li:nth-child(5) { animation-delay: 2.5s; }
+        .honest-list li:nth-child(6) { animation-delay: 3.2s; }
+        .honest-list li:nth-child(7) { animation-delay: 3.9s; }
+        
+        @keyframes fadeInLine {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* LETTER */
+        .letter-text {
+            font-family: var(--font-serif);
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            line-height: 1.9;
+            font-style: italic;
+            white-space: pre-line;
+            max-width: 550px;
+            text-align: left;
+        }
+        
+        /* CELEBRATION PARTICLES */
         .particle {
-            position: absolute; border-radius: 50%;
+            position: absolute;
+            border-radius: 50%;
             pointer-events: none;
             animation: floatUp 4s ease-out forwards;
         }
         @keyframes floatUp {
-            0% { opacity: 0.8; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-60vh) scale(0); }
+            0% { opacity: 0.7; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50vh) scale(0); }
         }
         
         /* SECRET TOAST */
         .secret-toast {
-            position: fixed; bottom: 2rem; left: 50%;
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.9);
+            background: rgba(20,20,22,0.95);
             border: 1px solid rgba(255,255,255,0.06);
-            padding: 1.5rem 2rem; border-radius: 16px;
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            text-align: center;
             z-index: 200;
-            font-family: 'EB Garamond', serif;
+            font-family: var(--font-serif);
             font-style: italic;
             animation: fadeInUp 0.5s ease;
+            max-width: 90vw;
         }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateX(-50%) translateY(20px); }
@@ -166,103 +210,175 @@
                 animation-duration: 0.01ms !important;
                 transition-duration: 0.01ms !important;
             }
+            .honest-list li { animation: none; opacity: 1; transform: none; }
+        }
+        
+        /* MOBILE */
+        @media (max-width: 400px) {
+            .scene { padding: 1.5rem 1rem; }
+            .btn-primary { padding: 0.8rem 1.8rem; font-size: 0.95rem; }
+            .letter-text { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- OPENING -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 0: OPENING                              -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section id="sceneOpening" class="scene active">
-        <div style="text-align: center; max-width: 600px;">
-            <p class="text-hero serif" id="openingLine1" style="margin-bottom: 0.5rem;">Hey, Her Name.</p>
-            <p class="text-body" id="openingLine2" style="margin-bottom: 2.5rem;">I made something for you.</p>
+        <div style="max-width: 600px;">
+            <p class="text-hero serif gap-xs" id="openingLine1">Hey, Duyen.</p>
+            <p class="text-body gap-lg" id="openingLine2">I made something for you.</p>
+            <p class="text-small gap-xl" id="openingLine3">Not because I had to. I just wanted to.</p>
             <button id="enterBtn" class="btn-primary">See what's inside →</button>
         </div>
     </section>
 
-    <!-- PERSONAL -->
-    <section id="scenePersonal" class="scene">
-        <div style="text-align: center; max-width: 500px;">
-            <p class="text-heading serif" style="margin-bottom: 1rem;">This isn't something I made for everyone.</p>
-            <p class="text-body" style="font-style: italic;">I made it just for you.</p>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 1: HOW IT STARTED                        -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneHowStarted" class="scene">
+        <div style="max-width: 550px; text-align: center;">
+            <p class="text-subheading serif gap-md" id="howTitle">A little unexpected...</p>
+            <p class="text-accent text-small gap-lg" id="howDate" style="text-transform: uppercase; letter-spacing: 0.15em;">March 2026</p>
+            <p class="text-body gap-sm" id="howLine1">Two people. Two countries. One random conversation on HelloTalk.</p>
+            <p class="text-body gap-sm" id="howLine2">I was in Japan. You were in Vietnam.</p>
+            <p class="text-body" id="howLine3" style="font-style: italic;">I didn't expect that conversation to stay in my head.</p>
         </div>
     </section>
 
-    <!-- MEMORIES -->
-    <section id="sceneMemories" class="scene">
-        <div style="width: 100%; max-width: 900px; padding: 4rem 0;">
-            <p class="text-heading serif" style="margin-bottom: 3rem; text-align: center;">Remember these?</p>
-            <div id="memoriesContainer"></div>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 2: KEPT TALKING                          -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneKeptTalking" class="scene">
+        <div style="max-width: 500px; text-align: center;">
+            <p class="text-heading serif gap-lg" id="keptTitle">Then we kept talking.</p>
+            <p class="text-body gap-sm" id="keptLine1">Not every day. Not always for hours.</p>
+            <p class="text-body gap-sm" id="keptLine2">Life gets busy.</p>
+            <p class="text-body gap-sm" id="keptLine3">I'm studying in Japan. You're living your life in Vietnam.</p>
+            <p class="text-body" id="keptLine4" style="font-style: italic;">But somehow, I still find myself thinking about you.</p>
         </div>
     </section>
 
-    <!-- PLAYFUL -->
-    <section id="scenePlayful" class="scene">
-        <div style="text-align: center; max-width: 500px;">
-            <p class="text-heading serif" id="playfulQuestion" style="margin-bottom: 2rem;">Quick question...</p>
-            <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-                <button id="optA" class="btn-primary" style="width: 100%; max-width: 280px;">Pizza 🍕</button>
-                <button id="optB" class="btn-ghost" style="width: 100%; max-width: 280px;">Talking to you</button>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 3: THE HONEST PART                       -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneHonest" class="scene">
+        <div style="max-width: 550px; text-align: center;">
+            <p class="text-heading serif gap-lg" id="honestTitle">And that's the funny part.</p>
+            <ul class="honest-list" id="honestList">
+                <li>We've never even met in person.</li>
+                <li>I don't have a hundred photos of us.</li>
+                <li>We don't have a favorite place together.</li>
+                <li>We don't have memories from some perfect date.</li>
+                <li>We just have conversations.</li>
+                <li>Little moments.</li>
+                <li>And somehow, they started meaning something to me.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 4: SMALL CONFESSION                      -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneConfession" class="scene">
+        <div style="max-width: 500px; text-align: center;">
+            <p class="text-body gap-sm" id="confLine1">Sometimes I open HelloTalk...</p>
+            <p class="text-body gap-sm" id="confLine2" style="font-style: italic;">...and secretly hope I'll see your message.</p>
+            <p class="text-body gap-lg" id="confLine3">Maybe that's when I realized...</p>
+            <p class="text-subheading serif" id="confLine4">I like talking to you more than I probably should.</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 5: DISTANCE                              -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <section id="sceneDistance" class="scene">
+        <div style="max-width: 400px; text-align: center;">
+            <p class="text-subheading serif" id="distCountry1" style="font-weight: 500;">Japan</p>
+            <div class="distance-connector">
+                <div class="distance-dot"></div>
+                <div class="distance-line"></div>
+                <div class="distance-dot"></div>
+                <div class="distance-line"></div>
+                <div class="distance-dot"></div>
             </div>
-            <p id="playfulResponse" style="margin-top: 1.5rem; font-style: italic; opacity: 0; transition: opacity 0.5s ease; font-family: 'EB Garamond', serif;"></p>
+            <p class="text-subheading serif gap-lg" id="distCountry2" style="font-weight: 500;">Vietnam</p>
+            <p class="text-body gap-sm" id="distLine3">Two countries. Busy lives. A surprisingly nice conversation.</p>
+            <p class="text-body gap-sm" id="distLine4">I don't know where this goes.</p>
+            <p class="text-body" id="distLine5" style="font-style: italic;">Maybe that's what makes it exciting.</p>
         </div>
     </section>
 
-    <!-- BUILDUP -->
-    <section id="sceneBuildup" class="scene">
-        <div style="text-align: center; max-width: 500px;">
-            <p class="text-heading serif" style="margin-bottom: 1.5rem;">So I've been thinking...</p>
-            <p class="text-body" style="margin-bottom: 1rem;">About you. About us.</p>
-            <p class="text-body">And there's something I want to ask you.</p>
-        </div>
-    </section>
-
-    <!-- LETTER -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 6: LETTER                                -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section id="sceneLetter" class="scene">
-        <div style="max-width: 550px; text-align: left;">
-            <p id="letterBody" style="font-family: 'EB Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.3rem); line-height: 1.9; font-style: italic; white-space: pre-line;"></p>
+        <div style="max-width: 550px;">
+            <p class="letter-text" id="letterBody"></p>
         </div>
     </section>
 
-    <!-- QUESTION -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 7: THE QUESTION                          -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section id="sceneQuestion" class="scene">
-        <div style="text-align: center; max-width: 500px;">
-            <p class="text-question serif" id="questionText" style="margin-bottom: 2.5rem;">Will you be my girlfriend?</p>
+        <div style="max-width: 500px; text-align: center;">
+            <p class="text-body gap-sm" style="font-style: italic;">So, Duyen...</p>
+            <p class="text-body gap-lg">I have one little question.</p>
+            <p class="text-question serif gap-xl" id="questionText">Would you like to be more than just someone I talk to?</p>
             <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-                <button id="yesBtn" class="btn-primary" style="width: 100%; max-width: 280px;">Yes ❤️</button>
-                <button id="maybeBtn" class="btn-ghost" style="width: 100%; max-width: 280px;">I need a moment...</button>
+                <button id="yesBtn" class="btn-primary" style="width: 100%; max-width: 300px;">Yes ❤️</button>
+                <button id="maybeBtn" class="btn-ghost" style="width: 100%; max-width: 300px;">I'd like to know you more first</button>
             </div>
         </div>
     </section>
 
-    <!-- YES -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 8: YES!                                  -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section id="sceneYes" class="scene">
-        <div style="text-align: center; max-width: 500px; position: relative; z-index: 2;">
-            <p class="text-hero serif" style="margin-bottom: 1rem;">Wait, really?</p>
-            <p class="text-heading serif" id="yesLine2" style="margin-bottom: 1rem;">You just made me so happy.</p>
-            <p class="text-body">I can't wait for what's next.</p>
+        <div style="max-width: 500px; text-align: center; position: relative; z-index: 2;">
+            <p class="text-subheading serif gap-sm" id="yesLine1">Then...</p>
+            <p class="text-heading serif gap-sm" id="yesLine2">I guess this little story has officially become our story.</p>
+            <p class="text-body gap-sm" id="yesLine3">I'm really happy, Duyen.</p>
+            <p class="text-body gap-sm" id="yesLine4">Let's see where this takes us.</p>
+            <p class="text-small gap-sm" id="yesLine5" style="font-style: italic;">— Bisuta</p>
         </div>
-        <div id="celebrationCanvas" style="position: absolute; inset: 0; z-index: 1; overflow: hidden;"></div>
+        <div id="celebrationCanvas" style="position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none;"></div>
     </section>
 
-    <!-- MAYBE -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCENE 9: MAYBE                                 -->
+    <!-- ═══════════════════════════════════════════════ -->
     <section id="sceneMaybe" class="scene">
-        <div style="text-align: center; max-width: 450px;">
-            <p id="maybeMessage" style="font-family: 'EB Garamond', serif; font-size: clamp(1.2rem, 3vw, 1.5rem); font-style: italic; margin-bottom: 2rem;">That's completely okay.</p>
-            <button id="returnBtn" class="btn-ghost">← Go back</button>
+        <div style="max-width: 450px; text-align: center;">
+            <p class="text-heading serif gap-sm" id="maybeLine1">That's completely okay.</p>
+            <p class="text-body gap-sm" id="maybeLine2">We can take our time.</p>
+            <p class="text-body gap-sm" id="maybeLine3">No pressure.</p>
+            <p class="text-body gap-lg" id="maybeLine4">I just wanted you to know how I feel.</p>
+            <button id="returnBtn" class="btn-ghost" id="maybeBtnText">Keep going →</button>
         </div>
     </section>
 
-    <!-- LIGHTBOX -->
-    <div id="lightbox" class="lightbox-overlay">
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-        <img id="lightboxImg" src="" alt="">
-        <p id="lightboxCaption" class="lightbox-caption"></p>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- LIGHTBOX (hidden, kept for structure)          -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div id="lightbox" class="lightbox-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s;">
+        <button class="lightbox-close" onclick="closeLightbox()" style="position:absolute;top:1.5rem;right:1.5rem;width:44px;height:44px;font-size:1.5rem;color:white;cursor:pointer;border-radius:50%;background:rgba(255,255,255,0.05);border:none;">✕</button>
+        <img id="lightboxImg" src="" alt="" style="max-width:90vw;max-height:75vh;border-radius:4px;">
+        <p id="lightboxCaption" style="margin-top:1rem;color:#9c958b;font-style:italic;font-family:'EB Garamond',serif;"></p>
     </div>
 
-    <!-- SECRET -->
-    <button id="secretTrigger" style="position: fixed; bottom: 1.5rem; right: 1.5rem; width: 36px; height: 36px; border-radius: 50%; background: transparent; border: none; cursor: pointer; opacity: 0.2; z-index: 50; font-size: 1.1rem;">✨</button>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SECRET TRIGGER                                 -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <button id="secretTrigger" style="position:fixed;bottom:1.5rem;right:1.5rem;width:36px;height:36px;border-radius:50%;background:transparent;border:none;cursor:pointer;opacity:0.2;z-index:50;font-size:1.1rem;transition:opacity 0.4s;" aria-label="Secret">✨</button>
 
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCRIPTS (order matters!)                       -->
+    <!-- ═══════════════════════════════════════════════ -->
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
