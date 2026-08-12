@@ -234,9 +234,13 @@
             });
         }
 
-        // ─── LIGHTBOX (kept minimal) ─────────────────        window.closeLightbox = function() {
+        // ─── LIGHTBOX ────────────────────────────────
+        window.closeLightbox = function() {
             const lb = $('lightbox');
-            if (lb) { lb.style.opacity = '0'; lb.style.pointerEvents = 'none'; }
+            if (lb) {
+                lb.style.opacity = '0';
+                lb.style.pointerEvents = 'none';
+            }
         };
 
         // ─── REDUCED MOTION ──────────────────────────
