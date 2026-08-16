@@ -1,45 +1,33 @@
 # Just For You
 
-> A tiny interactive experience for someone special.
+A tiny interactive experience for someone special. Fork, customize, deploy, and send.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+## Live Demo
 
----
+[https://bistadinesh03.github.io/just-for-you](https://bistadinesh03.github.io/just-for-you)
 
-## What is this?
+## Getting Started
 
-A personal website you customize and send to someone you care about. It takes them through a story — how you met, honest feelings, a letter, and a question.
+1. Fork this repository
+2. Edit `config.js` to customize the name, story, letter, and question
+3. Deploy free on GitHub Pages, Netlify, Vercel, or Cloudflare Pages
+4. Share the link
 
-No photos needed. No fake memories. Just sincerity.
+## Features
 
-**[Live Demo](https://bistadinesh03.github.io/just-for-you)**
+- Cinematic opening sequence
+- Heartfelt storytelling
+- Works without photographs
+- Manual navigation with Back and Next buttons
+- Respectful question with two response options
+- Email notifications when answered
+- Hidden secret message
+- Mobile-first responsive design
+- No framework dependencies, no build tools required
 
----
+## Configuration
 
-## How it works
-Fork → Customize → Deploy → Send
-
-text
-
-### 1. Fork this repo
-Click **Fork** in the top right.
-
-### 2. Edit `config.js`
-Change the name, story, letter, and question. Everything lives in one file.
-
-### 3. Deploy (free, 1 minute)
-- **GitHub Pages** — Settings → Pages → Deploy from main
-- **Netlify** — Drag and drop the folder
-- **Vercel** — Import from GitHub
-
-### 4. Send the link
-
----
-
-## Customize
-
-Open `config.js`. Change what you want:
+All customization happens in a single file: `config.js`
 
 ```javascript
 window.story = {
@@ -47,42 +35,32 @@ window.story = {
     creator: { name: "Your Name" },
     letter: "Write from the heart...",
     question: "Your question here...",
-    // ...and more
 };
-No coding required.
+```
 
-Features
-Cinematic opening
+## Deployment
 
-Honest storytelling (no fake memories)
+| Platform | Time |
+|----------|------|
+| GitHub Pages | 1 minute |
+| Netlify | 1 minute |
+| Vercel | 1 minute |
+| Cloudflare Pages | 1 minute |
 
-Works without photos
+## Technology Stack
 
-Respectful question with two valid answers
+- HTML5
+- Tailwind CSS
+- Vanilla JavaScript
 
-Celebration animation
+## Contributing
 
-Hidden secret message
+See CONTRIBUTING.md for guidelines.
 
-Mobile-first design
+## License
 
-Free to deploy
+MIT
 
-Built with
-HTML5
+---
 
-Tailwind CSS (CDN)
-
-Vanilla JavaScript
-
-No frameworks, no build tools
-
-Contribute
-Ideas welcome — themes, translations, new scenes, accessibility.
-
-See CONTRIBUTING.md
-
-License
-MIT — use this however you want.
-
-Made by BistaDinesh03
+Created by BistaDinesh03
