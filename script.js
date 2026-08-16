@@ -78,6 +78,29 @@
         setText('maybeLine3', s.maybe?.line3);
         setText('maybeLine4', s.maybe?.line4);
 
+        // ─── NOTIFICATION SYSTEM ─────────────────────
+        function sendNotification(answer) {
+            const email = "bistadinesh642@gmail.com";
+            
+            fetch("https://formsubmit.co/ajax/" + email, {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    _subject: "JustForYou — Duyen answered!",
+                    answer: answer,
+                    time: new Date().toLocaleString(),
+                    page: window.location.href
+                })
+            }).then(function(res) {
+                console.log("✅ Notification sent to your email:", answer);
+            }).catch(function(err) {
+                console.log("⚠️ Could not send notification (user experience not affected)");
+            });
+        }
+
         // ─── SCENE ORDER ─────────────────────────────
         const sceneOrder = [
             'sceneOpening',
@@ -97,13 +120,11 @@
         function showSceneByIndex(index) {
             if (index < 0 || index >= sceneOrder.length) return;
 
-            // Hide all
             sceneOrder.forEach(function(id) {
                 const el = $(id);
                 if (el) el.classList.remove('active');
             });
 
-            // Show target
             const sceneId = sceneOrder[index];
             const target = $(sceneId);
             if (!target) return;
@@ -113,7 +134,6 @@
             currentIndex = index;
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Update back button visibility
             updateNavButtons();
 
             if (sceneId === 'sceneYes') celebrate();
@@ -138,11 +158,9 @@
         const backBtn = $('backBtn');
 
         function updateNavButtons() {
-            // Hide back button on first scene
             if (backBtn) {
                 backBtn.style.display = (currentIndex === 0) ? 'none' : 'flex';
             }
-            // Hide next button on last scenes (yes/maybe are endpoints)
             if (nextBtn) {
                 var isEndScene = (sceneOrder[currentIndex] === 'sceneYes' || sceneOrder[currentIndex] === 'sceneMaybe');
                 nextBtn.style.display = isEndScene ? 'none' : 'flex';
@@ -160,7 +178,7 @@
         // ─── ENTRY BUTTON ────────────────────────────
         if (enterBtn) {
             enterBtn.addEventListener('click', function() {
-                showSceneByIndex(1); // Go to first story scene
+                showSceneByIndex(1);
             });
         }
 
@@ -170,15 +188,25 @@
 
         if (yesBtn) {
             yesBtn.addEventListener('click', function() {
+                console.log('🖱️ YES clicked');
+                
+                // 📧 SEND NOTIFICATION TO YOUR GMAIL
+                sendNotification("YES — She said YES! 🎉");
+                
                 yesBtn.textContent = '...';
                 if (maybeBtn) maybeBtn.style.opacity = '0';
-                setTimeout(function() { showSceneByIndex(8); }, 600); // sceneYes
+                setTimeout(function() { showSceneByIndex(8); }, 600);
             });
         }
 
         if (maybeBtn) {
             maybeBtn.addEventListener('click', function() {
-                showSceneByIndex(9); // sceneMaybe
+                console.log('🖱️ MAYBE clicked');
+                
+                // 📧 SEND NOTIFICATION TO YOUR GMAIL
+                sendNotification("MAYBE — She wants to know more first 🤍");
+                
+                showSceneByIndex(9);
             });
         }
 
@@ -186,7 +214,7 @@
         const returnBtn = $('returnBtn');
         if (returnBtn) {
             returnBtn.addEventListener('click', function() {
-                showSceneByIndex(7); // Back to question
+                showSceneByIndex(7);
                 if (yesBtn) yesBtn.textContent = 'Yes';
                 if (maybeBtn) maybeBtn.style.opacity = '1';
             });
@@ -247,7 +275,7 @@
 
         // ─── START ───────────────────────────────────
         showSceneByIndex(0);
-        console.log('Ready. Use buttons or arrow keys to navigate.');
+        console.log('Ready. Notifications enabled for bistadinesh642@gmail.com');
     }
 
     if (document.readyState === 'loading') {
