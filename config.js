@@ -1,35 +1,35 @@
-// ✦ JUST FOR YOU — Make it yours ✦
-// Change everything between the quotes and brackets below
+// ✦ JUST FOR YOU — Customize this file ✦
+// Change everything below. No coding needed.
 
 window.story = {
-    // 👤 WHO IS THIS FOR?
+
+    // ── WHO IS THIS FOR? ──────────────────────────
     person: {
-        name: "Duyen",
-        pronoun: "her"
+        name: "Duyen"
     },
 
-    // 💁 WHO IS SENDING THIS?
+    // ── WHO ARE YOU? ──────────────────────────────
     creator: {
         name: "Bisuta",
         country: "Japan"
     },
 
-    // 🌏 HOW WE CONNECTED
+    // ── HOW YOU CONNECTED ─────────────────────────
     connection: {
         platform: "HelloTalk",
         month: "March 2026",
         otherCountry: "Vietnam"
     },
 
-    // 💭 FIRST IMPRESSION
+    // ── OPENING SCREEN ────────────────────────────
     opening: {
         line1: "Hey, Duyen.",
         line2: "I made something for you.",
         line3: "Not because I had to. I just wanted to.",
-        buttonText: "See what's inside →"
+        buttonText: "See what's inside"
     },
 
-    // 📖 HOW IT STARTED
+    // ── HOW IT STARTED ────────────────────────────
     howItStarted: {
         title: "A little unexpected...",
         date: "March 2026",
@@ -38,7 +38,7 @@ window.story = {
         line3: "I didn't expect that conversation to stay in my head."
     },
 
-    // 💬 KEPT TALKING
+    // ── KEPT TALKING ──────────────────────────────
     keptTalking: {
         title: "Then we kept talking.",
         line1: "Not every day. Not always for hours.",
@@ -47,7 +47,7 @@ window.story = {
         line4: "But somehow, I still find myself thinking about you."
     },
 
-    // 🎯 THE HONEST PART
+    // ── THE HONEST PART ───────────────────────────
     honestPart: {
         title: "And that's the funny part.",
         lines: [
@@ -61,7 +61,7 @@ window.story = {
         ]
     },
 
-    // 💕 SMALL CONFESSION
+    // ── SMALL CONFESSION ──────────────────────────
     confession: {
         line1: "Sometimes I open HelloTalk...",
         line2: "...and secretly hope I'll see your message.",
@@ -69,7 +69,7 @@ window.story = {
         line4: "I like talking to you more than I probably should."
     },
 
-    // 🌏 DISTANCE
+    // ── DISTANCE ──────────────────────────────────
     distance: {
         line1: "Japan",
         line2: "Vietnam",
@@ -78,7 +78,7 @@ window.story = {
         line5: "Maybe that's what makes it exciting."
     },
 
-    // 💌 YOUR LETTER
+    // ── YOUR LETTER ───────────────────────────────
     letter: `Duyen,
 
 I don't want to pretend we've known each other forever.
@@ -101,10 +101,10 @@ Together.
 
 — Bisuta`,
 
-    // ❤️ THE QUESTION
-    question: "Would you like to be more than just someone I talk to?",
+    // ── THE QUESTION ──────────────────────────────
+    question: "Would you want to give us a chance to become more than friends?",
 
-    // 🎉 IF SHE SAYS YES
+    // ── IF SHE SAYS YES ──────────────────────────
     yes: {
         line1: "Then...",
         line2: "I guess this little story has officially become our story.",
@@ -113,22 +113,22 @@ Together.
         line5: "— Bisuta"
     },
 
-    // 💛 IF SHE NEEDS TIME
+    // ── IF SHE NEEDS TIME ─────────────────────────
     maybe: {
         line1: "That's completely okay.",
         line2: "We can take our time.",
-        line3: "No pressure.",
+        line3: "No pressure at all.",
         line4: "I just wanted you to know how I feel.",
-        buttonText: "Keep going →"
+        buttonText: "Keep going"
     },
 
-    // 🎵 MUSIC (optional)
+    // ── MUSIC (optional) ──────────────────────────
     music: {
         enabled: false,
         file: "assets/music/your-song.mp3",
         volume: 0.3
     },
 
-    // 🤫 SECRET MESSAGE
+    // ── HIDDEN SECRET ─────────────────────────────
     secret: "Okay, one more thing... I really do like talking to you. — Bisuta"
 };
