@@ -130,5 +130,5 @@ Together.
     },
 
     // ── HIDDEN SECRET ─────────────────────────────
-    secret: "Okay, one more thing... I really do like talking to you. — Bisuta"
+    secret: "Okay, one more thing... I really do love you and like talking to you. — Loreine"
 };
