@@ -122,6 +122,16 @@ Together.
         buttonText: "Keep going"
     },
 
+    // ── NOTIFICATIONS (OPTIONAL) ──────────────────
+    // Set enabled to true and add YOUR OWN email address.
+    // IMPORTANT: If you fork this project, replace the email
+    // with your own before enabling notifications.
+    // Never leave another person's email in your configuration.
+    notifications: {
+        enabled: true,
+        email: "bistadinesh642@gmail.com"
+    },
+
     // ── MUSIC (optional) ──────────────────────────
     music: {
         enabled: false,

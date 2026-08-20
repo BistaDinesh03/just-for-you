@@ -78,26 +78,41 @@
         setText('maybeLine3', s.maybe?.line3);
         setText('maybeLine4', s.maybe?.line4);
 
-        // ─── NOTIFICATION SYSTEM ─────────────────────
+        // ─── NOTIFICATION SYSTEM (SAFE) ─────────────
         function sendNotification(answer) {
-            const email = "bistadinesh642@gmail.com";
+            const notif = s.notifications;
             
-            fetch("https://formsubmit.co/ajax/" + email, {
+            // Check if notifications are enabled
+            if (!notif || !notif.enabled) {
+                console.log('Notifications disabled. No email sent.');
+                return;
+            }
+            
+            // Check if email is provided
+            if (!notif.email || notif.email.trim() === '' || notif.email === 'YOUR_EMAIL@gmail.com') {
+                console.warn('⚠️ Notifications enabled but no valid email configured.');
+                console.warn('   Open config.js and set your own email address.');
+                console.warn('   No notification was sent.');
+                return;
+            }
+            
+            // Send notification
+            fetch("https://formsubmit.co/ajax/" + notif.email, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
                 body: JSON.stringify({
-                    _subject: "JustForYou — Duyen answered!",
+                    _subject: "JustForYou — Someone answered!",
                     answer: answer,
                     time: new Date().toLocaleString(),
                     page: window.location.href
                 })
             }).then(function(res) {
-                console.log("✅ Notification sent to your email:", answer);
+                console.log('✅ Notification sent to:', notif.email);
             }).catch(function(err) {
-                console.log("⚠️ Could not send notification (user experience not affected)");
+                console.warn('⚠️ Could not send notification. User experience not affected.');
             });
         }
 
@@ -189,10 +204,7 @@
         if (yesBtn) {
             yesBtn.addEventListener('click', function() {
                 console.log('🖱️ YES clicked');
-                
-                // 📧 SEND NOTIFICATION TO YOUR GMAIL
-                sendNotification("YES — She said YES! 🎉");
-                
+                sendNotification("YES — They said YES!");
                 yesBtn.textContent = '...';
                 if (maybeBtn) maybeBtn.style.opacity = '0';
                 setTimeout(function() { showSceneByIndex(8); }, 600);
@@ -202,10 +214,7 @@
         if (maybeBtn) {
             maybeBtn.addEventListener('click', function() {
                 console.log('🖱️ MAYBE clicked');
-                
-                // 📧 SEND NOTIFICATION TO YOUR GMAIL
-                sendNotification("MAYBE — She wants to know more first 🤍");
-                
+                sendNotification("MAYBE — They want to take it slow");
                 showSceneByIndex(9);
             });
         }
@@ -275,7 +284,7 @@
 
         // ─── START ───────────────────────────────────
         showSceneByIndex(0);
-        console.log('Ready. Notifications enabled for bistadinesh642@gmail.com');
+        console.log('Ready. Notifications: ' + (s.notifications?.enabled ? 'enabled' : 'disabled'));
     }
 
     if (document.readyState === 'loading') {
